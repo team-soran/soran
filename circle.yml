@@ -1,0 +1,13 @@
+machine:
+  python:
+    version: 3.4.1
+
+dependencies:
+  pre:
+    - pip install pytest
+  override:
+    - pip install -e .
+
+test:
+  override:
+    - py.test tests
