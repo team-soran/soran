@@ -1,6 +1,20 @@
 # soran
 
+## table of contents
+
+ - [installation](#installation)
+   - [Prerequisites](#prerequisites)
+   - [dependencies](#dependencies)
+
 ## installation
+
+### Prerequisites
+
+    $ npm install -g grunt-cli
+    $ npm install
+    $ grunt selenium:download
+
+### dependencies
 
     $ pip install .
 
