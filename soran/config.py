@@ -2,7 +2,7 @@ import os
 
 
 def read_config(filename):
-    path = os.environ.get('BOILERPLATE_CONFIG', None) or filename
+    path = os.environ.get('SORAN_CONFIG', None) or filename
     config = {}
     if path is None:
         raise Exception('configuration not found')

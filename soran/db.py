@@ -10,7 +10,7 @@ __all__ = ('Base', 'ensure_shutdown_session', 'get_engine', 'get_session',
            'session', 'Session')
 
 def ensure_shutdown_session(app):
-    """ :py:attr:`dam.web.app.app` 의 문맥이 종료될때,
+    """:py:attr:`dam.web.app.app` 의 문맥이 종료될때,
     :py:attr:`dam.db.session` 이 반드시 닫히도록 합니다.
 
     :param flask.Flask app: dam의 flask 앱 :py:mod:`dam.web.app` .
@@ -25,7 +25,7 @@ def ensure_shutdown_session(app):
 
 
 def get_engine():
-    """ DB 연결에 필요한 엔진을 생성합니다.
+    """DB 연결에 필요한 엔진을 생성합니다.
 
     :return: :py:mod:`sqlalchemy` 의 엔진
     :rtype: :py:class:`sqlalchemy.engine.Engine`
@@ -38,7 +38,7 @@ def get_engine():
 
 
 def get_alembic_config(engine):
-    """ :py:mod:`alembic` 에필요한 설정을 가져옵니다.
+    """:py:mod:`alembic` 에필요한 설정을 가져옵니다.
 
     :param engine: db에 연결할 :py:class:`sqlalchemy.engine.Engine` 인스턴스
     :return: alembic 사용할때 필요한 설정이 담긴
@@ -55,7 +55,7 @@ def get_alembic_config(engine):
 
 
 def get_session(engine=None):
-    """ :py:mod:`sqlalchemy` 의 쿼리를 날릴때 사용하는 세션을 가지고옵니다.
+    """:py:mod:`sqlalchemy` 의 쿼리를 날릴때 사용하는 세션을 가지고옵니다.
 
     :param sqlalchemy.engine.Engine engine: :py:mod:`sqlalchemy` 엔진
     :return: DB에 쿼리를 날리때 사용하는 세션

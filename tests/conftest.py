@@ -4,8 +4,8 @@ from flask import g
 from pytest import fixture
 from sqlalchemy import create_engine
 
-from boilerplate.db import Base, Session
-from boilerplate.web.app import app
+from soran.db import Base, Session
+from soran.web.app import app
 
 TEST_DATABASE_URL = 'sqlite:///test.db'
 
