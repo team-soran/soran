@@ -29,12 +29,12 @@ def get_serializer():
 
 
 @singledispatch
-def soran_token(arg):
+def soran_token(arg, expired_at=None):
     return arg
 
 
 @soran_token.register(User)
-def _(arg):
+def _(arg, expired_at=None):
     """Create a token from given :class:`soran.user.User`
 
     :param soran.user.User arg: a soran user.
@@ -42,13 +42,14 @@ def _(arg):
     :rtype: str
     """
     s = get_serializer()
-    expired_at = datetime.now() + timedelta(days=EXPIRED_DAYS)
+    if expired_at is None:
+        expired_at = datetime.now() + timedelta(days=EXPIRED_DAYS)
     return s.dumps({'user_id': arg.id}).decode('utf-8')
 
 
 @soran_token.register(bytes)
 @soran_token.register(str)
-def _(arg):
+def _(arg, expired_at=None):
     """Find a user from given token.
 
     :param str arg: a soran token.

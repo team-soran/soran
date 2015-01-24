@@ -7,12 +7,15 @@ from sqlalchemy.exc import IntegrityError
 
 from ..db import session
 from ..user import User
+from .auth import soran_token
 from .response import ok, created
 
 bp = Blueprint('user', __name__, template_folder='templates/user')
 
 @bp.route('/', methods=['POST'])
 def create():
+    """Create a user.
+    """
     username = request.form.get('username', None)
     password = request.form.get('password', None)
     service = request.form.get('service', None)
@@ -27,3 +30,21 @@ def create():
         current_app.logger.error(exc)
         abort(500)
     return created()
+
+
+@bp.route('/authorize/', methods=['POST'])
+def authorize():
+    """Authorize a user and return a token.
+    """
+    username = request.form.get('username', None)
+    password = request.form.get('password', None)
+    secret_key = current_app.config.get('SECRET_KEY', ':)')
+    if username is None or password is None:
+        abort(400)
+    user = session.query(User)\
+           .filter(User.username == username)\
+           .filter(User.password == password)\
+           .first()
+    if not user:
+        abort(404)
+    return ok(token=soran_token(user))
