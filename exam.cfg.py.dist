@@ -1,2 +1,5 @@
 DEBUG = True
 DATABASE_URL = 'sqlite:///abc.db'
+
+#base64.b64encode(os.urandom(16))[:16].decode('utf-8')
+SECRET_KEY = ''
