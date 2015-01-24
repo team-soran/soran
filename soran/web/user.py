@@ -2,7 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort, current_app
+from sqlalchemy.exc import IntegrityError
 
 from ..db import session
 from ..user import User
@@ -18,5 +19,10 @@ def create_user():
         abort(400)
     user = User(username=username, password=password, service=service)
     session.add(user)
-    session.commit()
+    try:
+        session.commit()
+    except IntegrityError as exc:
+        session.rollback()
+        current_app.logger.error(exc)
+        abort(500)
     return jsonify()
