@@ -7,11 +7,12 @@ from sqlalchemy.exc import IntegrityError
 
 from ..db import session
 from ..user import User
+from .response import ok, created
 
 bp = Blueprint('user', __name__, template_folder='templates/user')
 
 @bp.route('/', methods=['POST'])
-def create_user():
+def create():
     username = request.form.get('username', None)
     password = request.form.get('password', None)
     service = request.form.get('service', None)
@@ -25,4 +26,4 @@ def create_user():
         session.rollback()
         current_app.logger.error(exc)
         abort(500)
-    return jsonify()
+    return created()

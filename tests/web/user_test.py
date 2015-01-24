@@ -12,8 +12,8 @@ def test_web_create_user(f_session):
     service = 'naver'
     data = {'username': username, 'password': password, 'service': service}
     with app.test_client() as client:
-        response = client.post(url_for('user.create_user'), data=data)
-    assert 200 == response.status_code
+        response = client.post(url_for('user.create'), data=data)
+    assert 201 == response.status_code
     assert response.data
     response_data = json.loads(response.data)
     find_user = f_session.query(User)\
@@ -39,5 +39,5 @@ def test_web_badsyntax_create_user(f_session, emit):
     data = {'username': username, 'password': password, 'service': service}
     del data[emit]
     with app.test_client() as client:
-        response = client.post(url_for('user.create_user'), data=data)
+        response = client.post(url_for('user.create'), data=data)
     assert 400 == response.status_code
