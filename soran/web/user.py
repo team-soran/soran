@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from ..db import session
 from ..user import User, Password
-from .auth import soran_token
+from .auth import Token
 from .response import ok, created
 
 bp = Blueprint('user', __name__, template_folder='templates/user')
@@ -46,4 +46,4 @@ def authorize():
            .first()
     if not user or user.password != password:
         abort(404)
-    return ok(token=soran_token(user))
+    return ok(token=Token(user=user, expired_at=None))

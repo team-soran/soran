@@ -3,7 +3,6 @@
 
 """
 from datetime import datetime, timedelta
-from functools import singledispatch
 
 from flask import current_app, json
 from itsdangerous import JSONWebSignatureSerializer
@@ -11,55 +10,57 @@ from itsdangerous import JSONWebSignatureSerializer
 from ..db import session
 from ..user import User
 
-__all__ = 'get_serializer', 'soran_token',
+__all__ = 'Token',
 
-EXPIRED_DAYS = 1000
+class Token:
+    EXPIRED_DAYS = 1000
 
-def get_serializer():
-    """Get a :class:`itsdangerous.JSONWebSignatureSerializer` .
-    """
-    default_key = ':)'
-    try:
-        secret_key = current_app.config.get('SECRET_KEY', default_key)
-    except RuntimeError:
-        secret_key = default_key
-    if secret_key is None:
-        secret_key = default_key
-    return JSONWebSignatureSerializer(secret_key)
+    def __init__(self, user, expired_at=None):
+        if expired_at is None:
+            expired_at = datetime.now() + timedelta(days=self.EXPIRED_DAYS)
+        self.expired_at = expired_at
+        self.user = user
 
+    @classmethod
+    def get_serializer(cls):
+        """Get a :class:`itsdangerous.JSONWebSignatureSerializer` .
+        """
+        default_key = ':)'
+        try:
+            secret_key = current_app.config.get('SECRET_KEY', default_key)
+        except RuntimeError:
+            secret_key = default_key
+        if secret_key is None:
+            secret_key = default_key
+        return JSONWebSignatureSerializer(secret_key)
 
-@singledispatch
-def soran_token(arg, expired_at=None):
-    return arg
+    @property
+    def token(self):
+        """Create a token from given :class:`soran.user.User`
 
+        :return: a generated token.
+        :rtype: str
+        """
+        if not self.user:
+            return None
+        s = Token.get_serializer()
+        return s.dumps({'user_id': self.user.id}).decode('utf-8')
 
-@soran_token.register(User)
-def _(arg, expired_at=None):
-    """Create a token from given :class:`soran.user.User`
+    @classmethod
+    def validate(cls, tok):
+        """Find a user from given token.
 
-    :param soran.user.User arg: a soran user.
-    :return: a token.
-    :rtype: str
-    """
-    s = get_serializer()
-    if expired_at is None:
-        expired_at = datetime.now() + timedelta(days=EXPIRED_DAYS)
-    return s.dumps({'user_id': arg.id}).decode('utf-8')
+        :param :class:`Token` token: a generated soran token.
+        :return: a user.
+        :rtype: :class:`soran.user.User`
+        """
+        s = Token.get_serializer()
+        payload = s.loads(tok)
+        user = session.query(User)\
+               .filter(User.id == payload['user_id'])\
+               .first()
+        #TODO: Check a expired_at
+        return user
 
-
-@soran_token.register(bytes)
-@soran_token.register(str)
-def _(arg, expired_at=None):
-    """Find a user from given token.
-
-    :param str arg: a soran token.
-    :return: a user.
-    :rtype: :class:`soran.user.User`
-    """
-    s = get_serializer()
-    payload = s.loads(arg)
-    user = session.query(User)\
-           .filter(User.id == payload['user_id'])\
-           .first()
-    #TODO: Check a expired_at
-    return user
+    def __eq__(self, other):
+        return self.token == other and self.user == Token.validate(other)

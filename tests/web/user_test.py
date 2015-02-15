@@ -3,7 +3,7 @@ from pytest import mark
 
 from soran.user import User
 from soran.web.app import app
-from soran.web.auth import soran_token
+from soran.web.auth import Token
 
 from .util import url_for
 
@@ -65,8 +65,8 @@ def test_web_authorize_user(f_session, f_user):
     assert 'data' in response_data
     assert 'token' in response_data['data']
     assert response_data['data']['token']
-    expected_token = soran_token(f_user)
-    assert expected_token == response_data['data']['token']
+    expected_token = Token(user=f_user)
+    assert expected_token.token == response_data['data']['token']
 
 
 @mark.parametrize('weird', ('password', 'username'))

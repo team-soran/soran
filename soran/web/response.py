@@ -5,11 +5,10 @@
 from datetime import datetime, date
 from functools import singledispatch
 
-import json
-
 from flask import jsonify
 
 from ..user import User
+from .auth import Token
 
 __all__ = 'ok', 'created', 'jsonable'
 
@@ -67,3 +66,8 @@ def _(arg, depth=1):
 @jsonable.register(date)
 def _(arg, depth=1):
     return arg.strftime('%Y-%m-%dT%H:%M:%S')
+
+
+@jsonable.register(Token)
+def _(arg, depth=1):
+    return arg.token
