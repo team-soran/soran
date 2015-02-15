@@ -21,7 +21,7 @@ def create():
     service = request.form.get('service', None)
     if username is None or password is None or service is None:
         abort(400)
-    user = User(username=username, password=password, service=service)
+    user = User(name=username, password=password, service=service)
     session.add(user)
     try:
         session.commit()
