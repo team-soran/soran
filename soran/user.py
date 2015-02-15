@@ -45,6 +45,8 @@ class PasswordType(TypeDecorator):
     impl = Unicode
 
     def process_bind_param(self, value, dialect):
+        if isinstance(value, str):
+            value = Password(value)
         return value.encrypt().decode('utf-8')
 
     def process_result_value(self, value, dialect):
@@ -97,6 +99,16 @@ class Password:
         """
         return not (self == other)
 
+    def __str__(self):
+        if self._encrypted:
+            return self._encrypted
+        return self.encrypt()
+
+    def __repr__(self):
+        if not self._encrypted:
+            self.encrypt()
+        return 'Password({})'.format(self._encrypted)
+
 
 class User(Person):
     """Soran user model.
@@ -105,12 +117,4 @@ class User(Person):
     __tablename__ = 'users'
 
     id = Column(Integer, ForeignKey('persons.id'), primary_key=True)
-    _password = Column(PasswordType, nullable=False)
-
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, val):
-        self._password = Password(val)
+    password = Column(PasswordType, nullable=False)

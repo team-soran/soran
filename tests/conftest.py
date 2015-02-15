@@ -19,7 +19,7 @@ def get_engine():
 
 @fixture
 def f_user(f_session):
-    user = User(username='hello', password='password:hello', service='naver')
+    user = User(name='hello', password='password:hello', service='naver')
     f_session.add(user)
     f_session.commit()
     return user

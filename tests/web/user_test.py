@@ -56,7 +56,7 @@ def test_web_badsyntax_authorize_user(f_session, emit):
 
 
 def test_web_authorize_user(f_session, f_user):
-    data = {'username': f_user.username, 'password': f_user.password}
+    data = {'username': f_user.name, 'password': 'password:hello'}
     with app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
     assert 200 == response.status_code
@@ -71,8 +71,8 @@ def test_web_authorize_user(f_session, f_user):
 
 @mark.parametrize('weird', ('password', 'username'))
 def test_web_notfound_authroize_user(f_session, f_user, weird):
-    data = {'username': f_user.username, 'password': f_user.password}
-    data[weird] += 'werid-sentence'
+    data = {'username': f_user.name, 'password': f_user.password}
+    data[weird] = 'werid-sentence'
     with app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
     assert 404 == response.status_code

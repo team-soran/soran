@@ -6,7 +6,7 @@ from flask import Blueprint, jsonify, request, abort, current_app
 from sqlalchemy.exc import IntegrityError
 
 from ..db import session
-from ..user import User
+from ..user import User, Password
 from .auth import soran_token
 from .response import ok, created
 
@@ -16,9 +16,9 @@ bp = Blueprint('user', __name__, template_folder='templates/user')
 def create():
     """Create a user.
     """
-    username = request.form.get('username', None)
-    password = request.form.get('password', None)
-    service = request.form.get('service', None)
+    username = request.form.get('username')
+    password = request.form.get('password')
+    service = request.form.get('service')
     if username is None or password is None or service is None:
         abort(400)
     user = User(name=username, password=password, service=service)
@@ -36,15 +36,14 @@ def create():
 def authorize():
     """Authorize a user and return a token.
     """
-    username = request.form.get('username', None)
-    password = request.form.get('password', None)
+    username = request.form.get('username')
+    password = request.form.get('password')
     secret_key = current_app.config.get('SECRET_KEY', ':)')
     if username is None or password is None:
         abort(400)
     user = session.query(User)\
-           .filter(User.username == username)\
-           .filter(User.password == password)\
+           .filter(User.name == username)\
            .first()
-    if not user:
+    if not user or user.password != password:
         abort(404)
     return ok(token=soran_token(user))
