@@ -1,5 +1,6 @@
 from soran.user import User
 
+
 def test_create_user(f_session):
     username = 'aaa'
     password = 'abc'

@@ -13,7 +13,7 @@ class Music(Base):
 
     id = Column(Integer, primary_key=True)
 
-    title = Column(Unicode, nullable=False)
+    name = Column(Unicode, nullable=False)
 
     album = Column(Unicode, nullable=False)
 
@@ -25,31 +25,30 @@ class Music(Base):
 
     count = Column(Integer, nullable=False, default=0)
 
-    type = Column(Unicode, nullable=False)
+    service = Column(Unicode, nullable=False)
 
-    user = Column(Integer, ForeignKey('persons.id'), primary_key=True)
+    username = Column(Integer, ForeignKey('persons.id'), primary_key=True)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'music',
-        'polymorphic_on': type
-    }
+    __mapper_args__ = {'polymorphic_on': service}
 
 
-class NaverMusic(Music):
+class Naver(Music):
     """ NaverMusic Model, This model is inherited by Music model.
     """
-    __tablename__ = 'NaverMusic'
+    __mapper_args__ = {'polymorphic_identity': 'naver'}
+    __tablename__ = 'naver'
 
     id = Column(Integer, ForeignKey('Music.id'), primary_key=True)
 
-    __mapper_args__ = {'polymorphic_identity': 'naver_music'}
+    service_id = Column(Integer, nullable=False)
 
 
 class Bugs(Music):
     """ Bugs Model, This model is inherited by Music model.
     """
+    __mapper_args__ = {'polymorphic_identity': 'bugs'}
     __tablename__ = 'bugs'
 
     id = Column(Integer, ForeignKey('Music.id'), primary_key=True)
 
-    __mapper_args__ = {'polymorphic_identity': 'bugs'}
+    service_id = Column(Integer, nullable=False)
