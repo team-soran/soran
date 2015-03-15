@@ -6,8 +6,11 @@ from sqlalchemy.types import Integer, Unicode, DateTime
 from .db import Base
 
 
+__all__ = 'Music', 'Naver', 'Bugs',
+
+
 class Music(Base):
-    """ Soran music model.
+    """Soran music model.
     """
     __tablename__ = 'Music'
 
@@ -33,7 +36,7 @@ class Music(Base):
 
 
 class Naver(Music):
-    """ NaverMusic Model, This model is inherited by Music model.
+    """NaverMusic Model, This model is inherited by Music model.
     """
     __mapper_args__ = {'polymorphic_identity': 'naver'}
     __tablename__ = 'naver'
@@ -44,7 +47,7 @@ class Naver(Music):
 
 
 class Bugs(Music):
-    """ Bugs Model, This model is inherited by Music model.
+    """Bugs Model, This model is inherited by Music model.
     """
     __mapper_args__ = {'polymorphic_identity': 'bugs'}
     __tablename__ = 'bugs'
