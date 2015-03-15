@@ -11,6 +11,7 @@ import bcrypt
 
 from .db import Base
 
+
 class Person(Base):
     """Soran person who use soran, collected from naver, bugs.
     """

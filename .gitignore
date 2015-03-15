@@ -12,3 +12,6 @@ __pycache__
 
 
 *.cfg.py
+
+.idea/
+venv/

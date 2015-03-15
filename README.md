@@ -20,7 +20,7 @@
 
 ## run server
 
-    $ cp exam.cfg.py.idst exam.cfg.py
+    $ cp exam.cfg.py.dist exam.cfg.py
     $ soran -c exam.cfg.py upgrade
     $ soran -c exam.cfg.py runserver
 
