@@ -1,4 +1,5 @@
 from soran.song import Song
+from .album_test import test_create_album
 
 
 def test_create_song(f_session):
@@ -7,15 +8,17 @@ def test_create_song(f_session):
     song = Song(name=name, service=service)
     f_session.add(song)
     f_session.commit()
-    find_artist = f_session.query(Song)\
+    find_song = f_session.query(Song)\
         .filter(Song.name == name)\
         .first()
-    assert find_artist
-    assert hasattr(find_artist, 'id')
-    assert find_artist.id
-    assert hasattr(find_artist, 'created_at')
-    assert find_artist.created_at
-    assert hasattr(find_artist, 'updated_at')
-    assert find_artist.updated_at
-    assert name == find_artist.name
-    assert service == find_artist.service
+    test_create_album(f_session)
+    assert find_song
+    assert hasattr(find_song, 'id')
+    assert find_song.id
+    assert hasattr(find_song, 'created_at')
+    assert find_song.created_at
+    assert hasattr(find_song, 'updated_at')
+    assert find_song.updated_at
+    assert name == find_song.name
+    assert service == find_song.service
+    assert hasattr(find_song, 'album_id')
