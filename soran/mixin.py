@@ -1,13 +1,15 @@
 from datetime import datetime
 
 from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer, DateTime
-
-from .db import Base
+from sqlalchemy.types import Integer, Unicode, DateTime
 
 
-class BaseMixin(Base):
+class BaseMixin:
     id = Column(Integer, primary_key=True)
+
+    name = Column(Unicode, nullable=False)
+
+    service = Column(Unicode, nullable=False)
 
     created_at = Column(DateTime, nullable=False, default=datetime.now)
 
