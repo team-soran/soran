@@ -1,7 +1,7 @@
 from soran.album import Album
 
 
-def test_create_user(f_session):
+def test_create_album(f_session):
     name = 'aaa'
     service = 'naver'
     album = Album(name=name, service=service)

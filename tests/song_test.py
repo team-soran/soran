@@ -1,14 +1,14 @@
-from soran.artist import Artist
+from soran.song import Song
 
 
-def test_create_artist(f_session):
+def test_create_song(f_session):
     name = 'aaa'
     service = 'naver'
-    artist = Artist(name=name, service=service)
-    f_session.add(artist)
+    song = Song(name=name, service=service)
+    f_session.add(song)
     f_session.commit()
-    find_artist = f_session.query(Artist)\
-        .filter(Artist.name == name)\
+    find_artist = f_session.query(Song)\
+        .filter(Song.name == name)\
         .first()
     assert find_artist
     assert hasattr(find_artist, 'id')
