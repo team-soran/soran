@@ -7,9 +7,9 @@ def test_create_album(f_session):
     album = Album(name=name, service=service)
     f_session.add(album)
     f_session.commit()
-    find_album = f_session.query(Album)\
-        .filter(Album.name == name)\
-        .first()
+    find_album = f_session.query(Album) \
+                                .filter(Album.name == name) \
+                                .first()
     assert find_album
     assert hasattr(find_album, 'id')
     assert find_album.id

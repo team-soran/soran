@@ -1,5 +1,8 @@
 from soran.song import Song
-from .album_test import test_create_album
+from soran.album import Album
+from soran.artist import Artist
+
+from pytest import fixture
 
 
 def test_create_song(f_session):
@@ -8,10 +11,10 @@ def test_create_song(f_session):
     song = Song(name=name, service=service)
     f_session.add(song)
     f_session.commit()
-    find_song = f_session.query(Song)\
-        .filter(Song.name == name)\
-        .first()
-    test_create_album(f_session)
+    find_song = f_session.query(Song) \
+                                .filter(Song.name == name) \
+                                .first()
+    f_album(f_session, name)
     assert find_song
     assert hasattr(find_song, 'id')
     assert find_song.id
@@ -22,3 +25,10 @@ def test_create_song(f_session):
     assert name == find_song.name
     assert service == find_song.service
     assert hasattr(find_song, 'album_id')
+
+
+@fixture
+def f_album(f_session, name):
+    return f_session.query(Album) \
+                        .filter(Artist.name == name) \
+                        .first()
