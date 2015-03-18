@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 
 install_requires = [
   'flask == 0.10.1', 'flask-script == 2.0.5', 'sqlalchemy == 0.9.8',
-  'alembic == 0.7.4', 'itsdangerous == 0.24', 'bcrypt == 1.1.0'
+  'alembic == 0.7.4', 'itsdangerous == 0.24', 'bcrypt == 1.1.0',
+  'html5lib >= 0.999, < 0.1'
 ]
 
 test_require = [
