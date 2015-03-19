@@ -19,5 +19,5 @@ def test_create_album(f_session):
     assert find_album.updated_at
     assert name == find_album.name
     assert service == find_album.service
-    assert hasattr(find_album, 'artist')
-    assert hasattr(find_album, 'song')
+    assert hasattr(find_album, 'artists')
+    assert hasattr(find_album, 'songs')
