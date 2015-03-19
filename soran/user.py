@@ -27,7 +27,7 @@ class Person(Base):
 
     created_at = Column(DateTime, nullable=False, default=datetime.now)
 
-    modified_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
 
     __mapper_args__ = {'polymorphic_on': who}
 

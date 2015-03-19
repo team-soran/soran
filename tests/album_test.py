@@ -8,8 +8,8 @@ def test_create_album(f_session):
     f_session.add(album)
     f_session.commit()
     find_album = f_session.query(Album) \
-                                .filter(Album.name == name) \
-                                .first()
+                          .filter(Album.name == name) \
+                          .first()
     assert find_album
     assert hasattr(find_album, 'id')
     assert find_album.id
@@ -19,5 +19,5 @@ def test_create_album(f_session):
     assert find_album.updated_at
     assert name == find_album.name
     assert service == find_album.service
-    assert hasattr(find_album, 'artist_id')
-    assert hasattr(find_album, 'song_id')
+    assert hasattr(find_album, 'artist')
+    assert hasattr(find_album, 'song')

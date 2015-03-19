@@ -12,8 +12,8 @@ def test_create_song(f_session):
     f_session.add(song)
     f_session.commit()
     find_song = f_session.query(Song) \
-                                .filter(Song.name == name) \
-                                .first()
+                         .filter(Song.name == name) \
+                         .first()
     f_album(f_session, name)
     assert find_song
     assert hasattr(find_song, 'id')
