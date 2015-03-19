@@ -19,4 +19,4 @@ def test_create_artist(f_session):
     assert find_artist.updated_at
     assert name == find_artist.name
     assert service == find_artist.service
-    assert hasattr(find_artist, 'song')
+    assert hasattr(find_artist, 'songs')
