@@ -1,6 +1,8 @@
 from pytest import fixture
 
-from soran.artist import Artist
+from soran.artist import Artist, ArtistSongAssoc
+
+from .song_test import f_song
 
 
 def test_create_artist(f_session):
@@ -22,6 +24,15 @@ def test_create_artist(f_session):
     assert name == find_artist.name
     assert service == find_artist.service
     assert hasattr(find_artist, 'songs')
+
+
+def test_create_artist_song_assoc(f_session, f_artist, f_song):
+    artist_song_assoc = ArtistSongAssoc(artists=f_artist, songs=f_song)
+    f_session.add(artist_song_assoc)
+    f_session.commit()
+    assert artist_song_assoc
+    assert f_artist.id == artist_song_assoc.artist_id
+    assert f_song.id == artist_song_assoc.song_id
 
 
 @fixture

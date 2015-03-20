@@ -1,14 +1,23 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, Table
+from sqlalchemy import Column, Integer, ForeignKey
 
 from .db import Base
 from .user import Person
 from .song import Song
 
 
-artist_song_assoc = Table('artist_song_assoc', Base.metadata,
-                          Column('artist_id', Integer, ForeignKey('artists.id')),
-                          Column('song_id', Integer, ForeignKey('songs.id')))
+class ArtistSongAssoc(Base):
+    __tablename__ = 'artist_song_assoc'
+
+    id = Column(Integer, primary_key=True)
+
+    artist_id = Column(Integer, ForeignKey('artists.id'))
+
+    song_id = Column(Integer, ForeignKey('songs.id'))
+
+    artists = relationship('Artist')
+
+    songs = relationship('Song')
 
 
 class Artist(Person):
@@ -20,4 +29,4 @@ class Artist(Person):
 
     id = Column(Integer, ForeignKey('persons.id'), primary_key=True)
 
-    songs = relationship(Song, secondary=artist_song_assoc)
+    songs = relationship(Song, secondary='artist_song_assoc')

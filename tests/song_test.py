@@ -14,7 +14,6 @@ def test_create_song(f_session):
     find_song = f_session.query(Song) \
                          .filter(Song.name == name) \
                          .first()
-    f_album(f_session, name)
     assert find_song
     assert hasattr(find_song, 'id')
     assert find_song.id
@@ -28,7 +27,7 @@ def test_create_song(f_session):
 
 
 @fixture
-def f_album(f_session, name):
-    return f_session.query(Album) \
-                        .filter(Artist.name == name) \
-                        .first()
+def f_song():
+    name = 'aaa'
+    service = 'naver'
+    return Song(name=name, service=service)

@@ -1,7 +1,6 @@
 from pytest import fixture
 
-from soran.album import Album
-from soran.album import AlbumArtistAssoc
+from soran.album import Album, AlbumArtistAssoc
 
 from .artist_test import f_artist
 
