@@ -24,6 +24,7 @@ def test_create_song(f_session):
     assert name == find_song.name
     assert service == find_song.service
     assert hasattr(find_song, 'album_id')
+    assert hasattr(find_song, 'album')
 
 
 @fixture

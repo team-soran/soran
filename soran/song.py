@@ -13,4 +13,4 @@ class Song(Base, BaseMixin):
 
     album_id = Column(Integer, ForeignKey('albums.id'))
 
-    # album = relationship(Album)
+    album = relationship('Album')
