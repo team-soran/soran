@@ -1,3 +1,5 @@
+from pytest import fixture
+
 from soran.artist import Artist
 
 
@@ -20,3 +22,10 @@ def test_create_artist(f_session):
     assert name == find_artist.name
     assert service == find_artist.service
     assert hasattr(find_artist, 'songs')
+
+
+@fixture
+def f_artist():
+    name = 'aaa'
+    service = 'naver'
+    return Artist(name=name, service=service)
