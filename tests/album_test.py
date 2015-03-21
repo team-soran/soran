@@ -31,10 +31,14 @@ def test_create_album_artist_assoc(f_session, f_album, f_artist):
     album_artist_assoc = AlbumArtistAssoc(album=f_album, artists=f_artist)
     f_session.add(album_artist_assoc)
     f_session.commit()
-    find_album_artist_assoc = f_session.query(AlbumArtistAssoc) \
-                                       .filter(AlbumArtistAssoc.album_id == f_album.id) \
-                                       .first()
-    assert find_album_artist_assoc
+    find_album_assoc = f_session.query(AlbumArtistAssoc) \
+                                .filter(AlbumArtistAssoc.album_id == f_album.id) \
+                                .first()
+    find_artist_assoc = f_session.query(AlbumArtistAssoc) \
+                                 .filter(AlbumArtistAssoc.artist_id == f_artist.id) \
+                                 .first()
+    assert find_album_assoc
+    assert find_artist_assoc
     assert album_artist_assoc
     assert f_album.id == album_artist_assoc.album_id
     assert f_artist.id == album_artist_assoc.artist_id
