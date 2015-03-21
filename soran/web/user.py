@@ -2,7 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Blueprint, jsonify, request, abort, current_app
+from flask import (Blueprint, jsonify, request, abort, current_app,
+                   render_template)
 from sqlalchemy.exc import IntegrityError
 
 from ..db import session
@@ -10,7 +11,9 @@ from ..user import User, Password
 from .auth import Token
 from .response import ok, created
 
+
 bp = Blueprint('user', __name__, template_folder='templates/user')
+
 
 @bp.route('/', methods=['POST'])
 def create():
@@ -47,3 +50,8 @@ def authorize():
     if not user or user.password != password:
         abort(404)
     return ok(token=Token(user=user, expired_at=None))
+
+
+@bp.route('/authorize/', methods=['GET'])
+def get_authroize():
+    return render_template('authroize.html')

@@ -1,0 +1,7 @@
+{%- macro render_form(form, **attrs) -%}
+<form class="{{ ' '.join(attrs.classes) }}"
+      {%- for attr, value_ in attrs.items() if attr != 'classes' %}
+      {{ attr }}="{{ value_ }}"
+      {%- endfor -%}>
+  </form>
+{%- endmacro -%}

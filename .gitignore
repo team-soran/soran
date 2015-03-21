@@ -15,3 +15,5 @@ __pycache__
 
 .idea/
 venv/
+
+soran/web/static/bower/*
