@@ -3,8 +3,6 @@ from sqlalchemy import Column, Integer, ForeignKey
 
 from .db import Base
 from .mixin import BaseMixin
-from .artist import Artist
-from .song import Song
 
 
 class AlbumArtistAssoc(Base):
@@ -27,6 +25,6 @@ class Album(Base, BaseMixin):
     __tablename__ = 'albums'
     __repr_attr__ = 'name'
 
-    artists = relationship(Artist, secondary='album_artist_assoc')
+    artists = relationship('Artist', secondary='album_artist_assoc')
 
-    songs = relationship(Song)
+    songs = relationship('Song')

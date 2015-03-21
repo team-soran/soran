@@ -4,7 +4,6 @@ from soran.artist import Artist, ArtistSongAssoc
 
 from .song_test import f_song
 
-
 def test_create_artist(f_session):
     name = 'aaa'
     service = 'naver'
@@ -30,6 +29,10 @@ def test_create_artist_song_assoc(f_session, f_artist, f_song):
     artist_song_assoc = ArtistSongAssoc(artists=f_artist, songs=f_song)
     f_session.add(artist_song_assoc)
     f_session.commit()
+    find_album_artist_assoc = f_session.query(ArtistSongAssoc) \
+                                       .filter(ArtistSongAssoc.artist_id == f_artist.id) \
+                                       .first()
+    assert find_album_artist_assoc
     assert artist_song_assoc
     assert f_artist.id == artist_song_assoc.artist_id
     assert f_song.id == artist_song_assoc.song_id
