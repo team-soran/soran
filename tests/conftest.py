@@ -1,5 +1,3 @@
-import contextlib
-
 from flask import g
 from pytest import fixture
 from sqlalchemy import create_engine
@@ -8,13 +6,24 @@ from soran.db import Base, Session
 from soran.user import User
 from soran.web.app import app
 
+
 TEST_DATABASE_URL = 'sqlite:///test.db'
+
 
 def get_engine():
     url = app.config['DATABASE_URL'] = TEST_DATABASE_URL
     engine = create_engine(url)
     app.config['DATABASE_ENGINE'] = engine
     return engine
+
+
+@fixture
+def f_app():
+    app.config.update(
+        TESTING=True,
+        WTF_CSRF_ENABLED=False
+    )
+    return app
 
 
 @fixture
@@ -50,13 +59,13 @@ def f_session():
 '''
 
 @fixture
-def f_session(request):
-    with app.test_request_context() as _ctx:
+def f_session(f_app, request):
+    with f_app.test_request_context() as _ctx:
         engine = get_engine()
         Base.metadata.create_all(engine)
         _ctx.push()
         session = Session(bind=engine)
-        app.config['TESTING'] = True
+        f_app.config['TESTING'] = True
         setattr(g, 'sess', session)
         def finish():
             session.close()

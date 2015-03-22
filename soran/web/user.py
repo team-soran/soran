@@ -4,7 +4,9 @@
 """
 from flask import (Blueprint, jsonify, request, abort, current_app,
                    render_template)
+from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
+from wtforms import IntegerField, HiddenField, StringField
 
 from ..db import session
 from ..user import User, Password
@@ -41,7 +43,6 @@ def authorize():
     """
     username = request.form.get('username')
     password = request.form.get('password')
-    secret_key = current_app.config.get('SECRET_KEY', ':)')
     if username is None or password is None:
         abort(400)
     user = session.query(User)\
@@ -52,6 +53,21 @@ def authorize():
     return ok(token=Token(user=user, expired_at=None))
 
 
+class UserForm(Form):
+
+    who = HiddenField()
+
+    name = StringField()
+
+    service = HiddenField()
+
+
+class CreateUserForm(UserForm):
+
+    password = StringField()
+
+
 @bp.route('/authorize/', methods=['GET'])
 def get_authroize():
-    return render_template('authroize.html')
+    form = CreateUserForm()
+    return render_template('authroize.html', form=form)

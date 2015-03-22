@@ -65,36 +65,35 @@
 
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="span7">
-            <h3 class="footer-title">Subscribe</h3>
-            <p>좋아하는 아티스트의 새로운 업데이트 소식을 이메일로 받고 싶으세요? <br />
-              메일링리스트에 가입하고 신곡과 새 앨범 정보를 받으세요! <br />
-              <br />
-              <!-- // MAILCHIMP SUBSCRIBE CODE \\ -->
-              <a href="http://eepurl.com/zdG75" target="_blank" class="btn btn-large btn-block">메일주소 입력하기</a>
-              <!-- \\ MAILCHIMP SUBSCRIBE CODE // -->
-            </p>
-
-            <p class="pvl">
-              Tweet, Like
-            </p>
-
-            <a class="footer-brand" href="http://designmodo.com" target="_blank">
-              <!-- TRINITY STUDIO -->
-            </a>
-          </div> <!-- /span8 -->
 
           <div class="span5">
             <div class="footer-banner">
               <h3 class="footer-title">관련 링크</h3>
               <ul>
-                <li>개발자 블로그</li>
-                <li>벅스 뮤직</li>
-                <li>네이버 뮤직</li>
-                <li>개인정보 보호</li>
-                <li>서비스 이용약관</li>
+                <li>
+                  <a href="https://github.com/orgs/team-soran/people">
+                  개발자들
+                  </a>
+                </li>
+                <li>
+                  <a href="http://bugs.co.kr">
+                    벅스
+                  </a>
+                </li>
+                <li>
+                  <a href="http://music.naver.com">
+                    네이버 뮤직
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/orgs/team-soran">
+                    github
+                  </a>
+                </li>
               </ul>
+              <p>
+                소란은 오픈소스프로젝트로 만들어집니다. 여러분도 <a href="https://github.com/orgs/team-soran">참여</a>해보세요.
+              </p>
               © 2015 SORAN 소란 서비스 팀
             </div>
           </div>
@@ -102,23 +101,13 @@
       </div>
     </footer>
 
-    <!--
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-    <script src="@routes.Assets.at("javascripts/bootstrap-2.3.1.min.js")"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.dropkick-1.0.0.js")"></script>
-    <script src="@routes.Assets.at("javascripts/custom_checkbox_and_radio.js")"></script>
-    <script src="@routes.Assets.at("javascripts/custom_radio.js")"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.tagsinput.js")"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.placeholder.js")"></script>
-    <script src="http://vjs.zencdn.net/c/video.js"></script>
-    <script src="@routes.Assets.at("javascripts/qsort.js")"></script>
-    <script src="@routes.Assets.at("javascripts/d3.v3.min.js")"></script>
-    <script src="@routes.Assets.at("javascripts/soran.js")"></script>
-    <script src="@routes.Assets.at("javascripts/soran.fn.js")"></script>
-    <script src="@routes.Assets.at("javascripts/soran.cache.js")"></script>
-    <script src="@routes.Assets.at("javascripts/soran.playlist.js")"></script>
-    <script src="@routes.Assets.at("javascripts/soran.stats.js")"></script>
-    -->
+    <script src="{{ url_for('static', filename='bower/jquery/dist/jquery.min.js') }}">
+    </script>
+    <script src="{{ url_for('static', filename='bower/flat-ui/dist/js/flat-ui.min.js') }}">
+    </script>
+
+    {%- block script -%}
+    {%- endblock -%}
+
   </body>
 </html>

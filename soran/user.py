@@ -34,11 +34,11 @@ class PasswordType(TypeDecorator):
 
            _password = Column(PasswordType, nullable=False)
     """
+
     impl = Unicode
 
     def process_bind_param(self, value, dialect):
-        if isinstance(value, str):
-            value = Password(value)
+        value = Password(value)
         return value.encrypt().decode('utf-8')
 
     def process_result_value(self, value, dialect):
@@ -48,7 +48,9 @@ class PasswordType(TypeDecorator):
 class Password:
     """Password class for comparison, encryption.
     """
+
     _encrypted = None
+
     _plain = None
 
     def __init__(self, plain, encrypted=False):
