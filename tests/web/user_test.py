@@ -25,8 +25,8 @@ def test_web_create_user(f_session):
     assert find_user.id
     assert hasattr(find_user, 'created_at')
     assert find_user.created_at
-    assert hasattr(find_user, 'modified_at')
-    assert find_user.modified_at
+    assert hasattr(find_user, 'updated_at')
+    assert find_user.updated_at
     assert username == find_user.name
     assert password == find_user.password
     assert service == find_user.service
