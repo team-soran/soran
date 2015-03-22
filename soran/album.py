@@ -1,14 +1,18 @@
+""":mod:`soran.album` --- soran album
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey
 
 from .db import Base
-from .mixin import BaseMixin
+from .mixin import BaseMixin, ServiceMixin, NameMixin
 
 
-class AlbumArtistAssoc(Base):
-    __tablename__ = 'album_artist_assoc'
+__all__ = 'AlbumArtistAssoc', 'Album',
 
-    id = Column(Integer, primary_key=True)
+
+class AlbumArtistAssoc(Base, BaseMixin):
 
     album_id = Column(Integer, ForeignKey('albums.id'))
 
@@ -18,12 +22,15 @@ class AlbumArtistAssoc(Base):
 
     artists = relationship('Artist')
 
+    __tablename__ = 'album_artist_assoc'
 
-class Album(Base, BaseMixin):
+
+
+class Album(Base, NameMixin, ServiceMixin):
     """Soran album model.
     """
+
     __tablename__ = 'albums'
-    __repr_attr__ = 'name'
 
     artists = relationship('Artist', secondary='album_artist_assoc')
 

@@ -1,33 +1,24 @@
-""":mod:`soran` --- soran
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""":mod:`soran.user` --- soran user models
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from datetime import datetime
-
+from sqlalchemy import Integer
 from sqlalchemy.schema import Column, ForeignKey
-from sqlalchemy.types import Integer, Unicode, DateTime, TypeDecorator
+from sqlalchemy.types import Unicode, TypeDecorator
 
 import bcrypt
 
 from .db import Base
+from .mixin import ServiceMixin, NameMixin
 
 
-class Person(Base):
+class Person(Base, NameMixin, ServiceMixin):
     """Soran person who use soran, collected from naver, bugs.
     """
-    __tablename__ = 'persons'
-
-    id = Column(Integer, primary_key=True)
 
     who = Column(Unicode, nullable=False)
 
-    name = Column(Unicode, nullable=False)
-
-    service = Column(Unicode, nullable=False)
-
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-
-    updated_at = Column(DateTime, nullable=False, default=datetime.now)
+    __tablename__ = 'persons'
 
     __mapper_args__ = {'polymorphic_on': who}
 
@@ -114,8 +105,11 @@ class Password:
 class User(Person):
     """Soran user model.
     """
-    __mapper_args__ = {'polymorphic_identity': 'users'}
+
     __tablename__ = 'users'
 
+    __mapper_args__ = {'polymorphic_identity': 'users'}
+
     id = Column(Integer, ForeignKey('persons.id'), primary_key=True)
+
     password = Column(PasswordType, nullable=False)
