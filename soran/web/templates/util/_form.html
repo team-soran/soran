@@ -1,7 +1,24 @@
-{%- macro render_form(form, **attrs) -%}
-<form class="{{ ' '.join(attrs.classes) }}"
+{%- macro render_form(form, attrs={}) -%}
+<form class="form-horizontal {{ ' '.join(attrs.classes) }}"
       {%- for attr, value_ in attrs.items() if attr != 'classes' %}
       {{ attr }}="{{ value_ }}"
       {%- endfor -%}>
-  </form>
+
+  {%- for field in form -%}
+    {{ render_input(field) }}
+  {%- endfor -%}
+
+</form>
+{%- endmacro -%}
+
+{%- macro render_input(field) -%}
+  <div class="form-group {% if field.flags.required %}required{% endif %}">
+    <label for="" class="col-sm-2 control-label">
+      {{ field.label }}
+    </label>
+
+    <div class="col-sm-10">
+      {{ field }}
+    </div>
+  </div>
 {%- endmacro -%}

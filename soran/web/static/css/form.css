@@ -1,0 +1,8 @@
+.form-group.required .control-label:after {
+  content: "*";
+  color: rgb(255, 0, 0);
+}
+
+.form-group.required label {
+  font-weight: bold;
+}

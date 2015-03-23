@@ -7,6 +7,7 @@ from flask import (Blueprint, jsonify, request, abort, current_app,
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
 from wtforms import IntegerField, HiddenField, StringField
+from wtforms.validators import InputRequired
 
 from ..db import session
 from ..user import User, Password
@@ -53,18 +54,25 @@ def authorize():
     return ok(token=Token(user=user, expired_at=None))
 
 
+class MyForm(Form):
+
+    def __init__(self, *args, **kwargs):
+        kwargs['secret_key'] = current_app.config.get('SECRET_KEY', None)
+        super(MyForm, self).__init__(*args, **kwargs)
+
+
 class UserForm(Form):
 
-    who = HiddenField()
+    name = StringField(label='이름', validators=[InputRequired])
 
-    name = StringField()
+    who = HiddenField(validators=[InputRequired])
 
-    service = HiddenField()
+    service = HiddenField(validators=[InputRequired])
 
 
 class CreateUserForm(UserForm):
 
-    password = StringField()
+    password = StringField(label='비밀번호', validators=[InputRequired])
 
 
 @bp.route('/authorize/', methods=['GET'])
