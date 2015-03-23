@@ -1,8 +1,4 @@
-from pytest import fixture
-
 from soran.album import Album, AlbumArtistAssoc
-
-from .artist_test import f_artist
 
 
 def test_create_album(f_session):
@@ -42,10 +38,3 @@ def test_create_album_artist_assoc(f_session, f_album, f_artist):
     assert album_artist_assoc
     assert f_album.id == album_artist_assoc.album_id
     assert f_artist.id == album_artist_assoc.artist_id
-
-
-@fixture
-def f_album():
-    name = 'aaa'
-    service = 'naver'
-    return Album(name=name, service=service)

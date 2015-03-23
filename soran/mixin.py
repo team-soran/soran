@@ -32,7 +32,7 @@ class BaseMixin:
 
 class ServiceMixin:
 
-    default_services = set(['naver', 'bugs', 'youtube'])
+    default_services = set(['naver', 'bugs', 'youtube', 'soran'])
 
     service = Column(Unicode, nullable=False)
 

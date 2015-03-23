@@ -12,6 +12,9 @@ from .db import Base
 from .mixin import ServiceMixin, NameMixin
 
 
+__all__ = 'Person', 'PasswordType', 'Password', 'User',
+
+
 class Person(Base, NameMixin, ServiceMixin):
     """Soran person who use soran, collected from naver, bugs.
     """
