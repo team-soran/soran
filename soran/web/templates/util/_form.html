@@ -1,0 +1,31 @@
+{%- macro render_form(form, attrs={}) -%}
+<form class="form-horizontal {{ ' '.join(attrs.classes) }}"
+      {%- for attr, value_ in attrs.items() if attr != 'classes' %}
+      {{ attr }}="{{ value_ }}"
+      {%- endfor -%}>
+
+  {%- with hidden_field = import_python('wtforms:HiddenField') -%}
+    {%- for field in form -%}
+      {%- if isinstance(field, hidden_field) -%}
+        {{ field }}
+      {%- else -%}
+        {{ render_input(field) }}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endwith -%}
+
+
+</form>
+{%- endmacro -%}
+
+{%- macro render_input(field) -%}
+  <div class="form-group {% if field.flags.required %}required{% endif %}">
+    <label for="" class="col-sm-2 control-label">
+      {{ field.label }}
+    </label>
+
+    <div class="col-sm-10">
+      {{ field }}
+    </div>
+  </div>
+{%- endmacro -%}

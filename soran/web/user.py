@@ -2,15 +2,21 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Blueprint, jsonify, request, abort, current_app
+from flask import (Blueprint, request, abort, current_app,
+                   render_template)
+from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
+from wtforms import HiddenField, StringField
+from wtforms.validators import InputRequired
 
 from ..db import session
-from ..user import User, Password
+from ..user import User
 from .auth import Token
 from .response import ok, created
 
+
 bp = Blueprint('user', __name__, template_folder='templates/user')
+
 
 @bp.route('/', methods=['POST'])
 def create():
@@ -38,7 +44,6 @@ def authorize():
     """
     username = request.form.get('username')
     password = request.form.get('password')
-    secret_key = current_app.config.get('SECRET_KEY', ':)')
     if username is None or password is None:
         abort(400)
     user = session.query(User)\
@@ -47,3 +52,30 @@ def authorize():
     if not user or user.password != password:
         abort(404)
     return ok(token=Token(user=user, expired_at=None))
+
+
+class MyForm(Form):
+
+    def __init__(self, *args, **kwargs):
+        kwargs['secret_key'] = current_app.config.get('SECRET_KEY', None)
+        super(MyForm, self).__init__(*args, **kwargs)
+
+
+class UserForm(Form):
+
+    name = StringField(label='이름', validators=[InputRequired])
+
+    who = HiddenField(validators=[InputRequired])
+
+    service = HiddenField(validators=[InputRequired])
+
+
+class CreateUserForm(UserForm):
+
+    password = StringField(label='비밀번호', validators=[InputRequired])
+
+
+@bp.route('/authorize/', methods=['GET'])
+def get_authroize():
+    form = CreateUserForm()
+    return render_template('authroize.html', form=form)

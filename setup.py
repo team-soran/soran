@@ -4,16 +4,21 @@ from setuptools import setup, find_packages
 install_requires = [
   'flask == 0.10.1', 'flask-script == 2.0.5', 'sqlalchemy == 0.9.8',
   'alembic == 0.7.4', 'itsdangerous == 0.24', 'bcrypt == 1.1.0',
-  'html5lib >= 0.999, < 1.0'
+  'html5lib >= 0.999, < 1.0',
+  'wtforms >= 2.0.2, < 2.1.0',
+  'flask-wtf >= 0.11, < 0.2',
 ]
+
 
 test_require = [
     'pytest == 2.6.4',
 ]
 
+
 docs_require = [
     'sphinx == 1.2.3',
 ]
+
 
 setup(
     name='soran',
