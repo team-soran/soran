@@ -2,15 +2,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import (Blueprint, jsonify, request, abort, current_app,
+from flask import (Blueprint, request, abort, current_app,
                    render_template)
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
-from wtforms import IntegerField, HiddenField, StringField
+from wtforms import HiddenField, StringField
 from wtforms.validators import InputRequired
 
 from ..db import session
-from ..user import User, Password
+from ..user import User
 from .auth import Token
 from .response import ok, created
 

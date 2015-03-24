@@ -4,9 +4,16 @@
       {{ attr }}="{{ value_ }}"
       {%- endfor -%}>
 
-  {%- for field in form -%}
-    {{ render_input(field) }}
-  {%- endfor -%}
+  {%- with hidden_field = import_python('wtforms:HiddenField') -%}
+    {%- for field in form -%}
+      {%- if isinstance(field, hidden_field) -%}
+        {{ field }}
+      {%- else -%}
+        {{ render_input(field) }}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endwith -%}
+
 
 </form>
 {%- endmacro -%}
