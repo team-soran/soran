@@ -6,8 +6,8 @@ from flask import (Blueprint, request, abort, current_app,
                    render_template)
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
-from wtforms import HiddenField, StringField
-from wtforms.validators import InputRequired
+from wtforms import HiddenField, StringField, PasswordField
+from wtforms.validators import input_required
 
 from ..db import session
 from ..user import User
@@ -18,16 +18,30 @@ from .response import ok, created
 bp = Blueprint('user', __name__, template_folder='templates/user')
 
 
+class UserForm(Form):
+
+    name = StringField(label='이름', validators=[input_required()])
+
+    who = HiddenField(validators=[input_required()], default='users')
+
+    service = HiddenField(validators=[input_required()], default='soran')
+
+
+class CreateUserForm(UserForm):
+
+    password = PasswordField(label='비밀번호', validators=[input_required()])
+
+
 @bp.route('/', methods=['POST'])
 def create():
     """Create a user.
     """
-    username = request.form.get('username')
-    password = request.form.get('password')
-    service = request.form.get('service')
-    if username is None or password is None or service is None:
+    form = CreateUserForm()
+    if not form.validate_on_submit():
+        print(form.errors)
         abort(400)
-    user = User(name=username, password=password, service=service)
+    user = User()
+    form.populate_obj(user)
     session.add(user)
     try:
         session.commit()
@@ -46,36 +60,16 @@ def authorize():
     password = request.form.get('password')
     if username is None or password is None:
         abort(400)
-    user = session.query(User)\
-           .filter(User.name == username)\
-           .first()
+    user = session.query(User) \
+                  .filter(User.name == username) \
+                  .first()
     if not user or user.password != password:
         abort(404)
     return ok(token=Token(user=user, expired_at=None))
 
 
-class MyForm(Form):
-
-    def __init__(self, *args, **kwargs):
-        kwargs['secret_key'] = current_app.config.get('SECRET_KEY', None)
-        super(MyForm, self).__init__(*args, **kwargs)
-
-
-class UserForm(Form):
-
-    name = StringField(label='이름', validators=[InputRequired])
-
-    who = HiddenField(validators=[InputRequired])
-
-    service = HiddenField(validators=[InputRequired])
-
-
-class CreateUserForm(UserForm):
-
-    password = StringField(label='비밀번호', validators=[InputRequired])
-
-
 @bp.route('/authorize/', methods=['GET'])
 def get_authroize():
     form = CreateUserForm()
+    form.process(request.args)
     return render_template('authroize.html', form=form)

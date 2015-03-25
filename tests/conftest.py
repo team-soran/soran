@@ -2,6 +2,8 @@ from flask import g
 from pytest import fixture
 from sqlalchemy import create_engine
 
+from soran.album import Album
+from soran.artist import Artist
 from soran.db import Base, Session
 from soran.user import User
 from soran.web.app import app
@@ -34,6 +36,24 @@ def f_user(f_session):
     return user
 
 
+@fixture
+def f_album(f_session):
+    name = 'Where is leeSA?'
+    service = 'naver'
+    album = Album(name=name, service=service)
+    f_session.add(album)
+    f_session.commit()
+    return album
+
+
+@fixture
+def f_artist(f_session):
+    name = 'leeSA'
+    service = 'naver'
+    artist = Artist(name=name, service=service)
+    f_session.add(artist)
+    f_session.commit()
+    return artist
 '''
 @contextlib.contextmanager
 def get_session():

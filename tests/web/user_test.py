@@ -11,7 +11,9 @@ def test_web_create_user(f_session):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
-    data = {'username': username, 'password': password, 'service': service}
+    who = 'users'
+    data = {'name': username, 'password': password, 'service': service,
+            'who': who}
     with app.test_client() as client:
         response = client.post(url_for('user.create'), data=data)
     assert 201 == response.status_code

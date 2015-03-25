@@ -6,7 +6,7 @@ install_requires = [
   'alembic == 0.7.4', 'itsdangerous == 0.24', 'bcrypt == 1.1.0',
   'html5lib >= 0.999, < 1.0',
   'wtforms >= 2.0.2, < 2.1.0',
-  'flask-wtf >= 0.11, < 0.2',
+  'flask-wtf >= 0.11',
 ]
 
 
