@@ -1,5 +1,7 @@
 from soran.user import User
 
+from pytest import fixture
+
 
 def test_create_user(f_session):
     username = 'aaa'
@@ -21,3 +23,11 @@ def test_create_user(f_session):
     assert username == find_user.name
     assert password == find_user.password
     assert service == find_user.service
+
+
+@fixture
+def f_user():
+    name = 'aaa'
+    password = 'abc'
+    service = 'naver'
+    return User(name=name, password=password, service=service)

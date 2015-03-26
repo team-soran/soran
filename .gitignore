@@ -17,3 +17,5 @@ __pycache__
 venv/
 
 soran/web/static/bower/*
+build/
+dist/
