@@ -19,6 +19,7 @@ def test_web_create_user(f_session):
     assert 201 == response.status_code
     assert response.data
     response_data = json.loads(response.data)
+    assert response_data
     find_user = f_session.query(User)\
                 .filter(User.name == username)\
                 .first()

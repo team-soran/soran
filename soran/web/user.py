@@ -32,7 +32,7 @@ class CreateUserForm(UserForm):
     password = PasswordField(label='비밀번호', validators=[input_required()])
 
 
-@bp.route('/', methods=['POST'])
+@bp.route('/users/', methods=['POST'])
 def create():
     """Create a user.
     """
@@ -52,7 +52,7 @@ def create():
     return created()
 
 
-@bp.route('/authorize/', methods=['POST'])
+@bp.route('/users/authorize/', methods=['POST'])
 def authorize():
     """Authorize a user and return a token.
     """
@@ -68,7 +68,7 @@ def authorize():
     return ok(token=Token(user=user, expired_at=None))
 
 
-@bp.route('/authorize/', methods=['GET'])
+@bp.route('/users/authorize/', methods=['GET'])
 def get_authroize():
     form = CreateUserForm()
     form.process(request.args)
