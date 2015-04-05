@@ -57,10 +57,9 @@ class Token:
         s = Token.get_serializer()
         payload = s.loads(tok)
         user = session.query(User)\
-               .filter(User.id == payload['user_id'])\
-               .first()
-        #TODO: Check a expired_at
+                      .filter(User.id == payload['user_id'])\
+                      .first()
         return user
 
     def __eq__(self, other):
-        return self.token == other and self.user == Token.validate(other)
+        return self.token == other and self.user.id == Token.validate(other).id

@@ -14,7 +14,7 @@ def test_web_create_user(f_session, f_app):
     who = 'users'
     data = {'name': username, 'password': password, 'service': service,
             'who': who}
-    with app.test_client() as client:
+    with f_app.test_client() as client:
         response = client.post(url_for('user.create'), data=data)
     assert 201 == response.status_code
     assert response.data
