@@ -2,12 +2,12 @@ from flask import json
 from pytest import mark
 
 from soran.user import User
-from soran.web.app import app
 from soran.web.auth import Token
 
 from .util import url_for
 
-def test_web_create_user(f_session):
+
+def test_web_create_user(f_session, f_app):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
@@ -36,31 +36,31 @@ def test_web_create_user(f_session):
 
 
 @mark.parametrize('emit', ('service', 'password', 'username'))
-def test_web_badsyntax_create_user(f_session, emit):
+def test_web_badsyntax_create_user(f_app, emit):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
     data = {'username': username, 'password': password, 'service': service}
     del data[emit]
-    with app.test_client() as client:
+    with f_app.test_client() as client:
         response = client.post(url_for('user.create'), data=data)
     assert 400 == response.status_code
 
 
 @mark.parametrize('emit', ('password', 'username'))
-def test_web_badsyntax_authorize_user(f_session, emit):
+def test_web_badsyntax_authorize_user(f_session, emit, f_app):
     username = 'aaa'
     password = 'abc'
     data = {'username': username, 'password': password}
     del data[emit]
-    with app.test_client() as client:
+    with f_app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
     assert 400 == response.status_code
 
 
-def test_web_authorize_user(f_session, f_user):
+def test_web_authorize_user(f_app, f_user):
     data = {'username': f_user.name, 'password': 'password:hello'}
-    with app.test_client() as client:
+    with f_app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
     assert 200 == response.status_code
     assert response.data
@@ -73,9 +73,23 @@ def test_web_authorize_user(f_session, f_user):
 
 
 @mark.parametrize('weird', ('password', 'username'))
-def test_web_notfound_authroize_user(f_session, f_user, weird):
+def test_web_notfound_authroize_user(f_session, f_user, weird, f_app):
     data = {'username': f_user.name, 'password': f_user.password}
     data[weird] = 'werid-sentence'
-    with app.test_client() as client:
+    with f_app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
     assert 404 == response.status_code
+
+
+def test_web_api_create_user(f_app):
+    username = 'aaa'
+    password = 'abc'
+    service = 'naver'
+    data = {'name': username, 'password': password, 'service': service,
+            'who': 'users'}
+    with f_app.test_client() as client:
+        response = client.post(url_for('user.create'), data=data)
+    assert response.status_code == 302
+    with f_app.test_client() as client:
+        response = client.post(url_for('user.api@create'), data=data)
+    assert response.status_code == 201

@@ -2,20 +2,20 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import (Blueprint, request, abort, current_app,
-                   render_template)
+from flask import request, abort, current_app, render_template
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
 from wtforms import HiddenField, StringField, PasswordField
 from wtforms.validators import input_required
 
 from ..db import session
+from soran.web.route import APIBlueprint
 from ..user import User
 from .auth import Token
 from .response import ok, created
 
 
-bp = Blueprint('user', __name__, template_folder='templates/user')
+bp = APIBlueprint('user', __name__, template_folder='templates/user')
 
 
 class UserForm(Form):
@@ -32,15 +32,14 @@ class CreateUserForm(UserForm):
     password = PasswordField(label='비밀번호', validators=[input_required()])
 
 
-@bp.route('/users/', methods=['POST'])
+@bp.route('/users/', methods=['POST'], api=True)
 def create():
     """Create a user.
     """
     form = CreateUserForm()
-    if not form.validate_on_submit():
-        print(form.errors)
-        abort(400)
     user = User()
+    if not form.validate_on_submit():
+        abort(400)
     form.populate_obj(user)
     session.add(user)
     try:

@@ -11,7 +11,7 @@ install_requires = [
 
 
 test_require = [
-    'pytest == 2.6.4',
+    'pytest => 2.7.0, < 2.8.0',
 ]
 
 
