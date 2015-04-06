@@ -6,11 +6,12 @@ from datetime import datetime, date
 from contextlib import contextmanager
 from functools import singledispatch, partial
 
-from flask import jsonify, request, flash, render_template
+from flask import (jsonify, request, flash, redirect, abort, render_template,\
+                   redirect as flask_redirect)
 
 from ..user import User
 from .auth import Token
-from .route import API_PREFIX
+from .route import API_PREFIX, API_ENDPOINT
 
 
 __all__ = 'ok', 'created', 'jsonable',
@@ -22,31 +23,115 @@ class UnacceptableSoranRequest(Exception):
 
 class DynamicResponse:
 
-    def __init__(self, html_func, status_code=None,
-                 html_flash=None, json_fields=None, json_depth=2,
-                 json_message='', *args, **kwargs):
+    mimetype = {
+        'html': 'text/html',
+        'json': 'application/json'
+    }
+
+    available_status_codes = [
+        100, # Continue
+        101, # Switching Protocols
+        200, # OK
+        201, # Created
+        202, # Accepted
+        203, # Non-Authoritative Information
+        204, # No Content
+        205, # Reset Content
+        206, # Partial Content
+        300, # Multiple Choices
+        301, # Moved Permanently
+        302, # Found
+        303, # See Other
+        304, # Not Modified
+        305, # Use Proxy
+        307, # Temporary Redirect
+        400, # Bad Request
+        401, # Unauthorized
+        402, # Payment Required
+        403, # Forbidden
+        404, # Not Found
+        405, # Method Not Allowed
+        406, # Not Acceptable
+        407, # Proxy Authentication Required
+        408, # Request Time-out
+        409, # Conflict
+        410, # Gone
+        411, # Length Required
+        412, # Precondition Failed
+        413, # Request Entity Too Large
+        414, # Request-URI Too Large
+        415, # Unsupported Media Type
+        416, # Requested range not satisfiable
+        417, # Expectation Failed
+        500, # Internal Server Error
+        501, # Not Implemented
+        502, # Bad Gateway
+        503, # Service Unavailable
+        504, # Gateway Time-out
+        505, # HTTP Version not supported
+    ]
+
+    def __init__(self, template_name=None, status_code=None, json_fields=None,
+                 json_depth=2, message='', *args, **kwargs):
+        if status_code not in self.available_status_codes:
+            raise ValueError('Invalid status code: {}'.format(status_code))
+        self.template_name = template_name
+        self.status_code = status_code
+        self.json_fields = json_fields
+        self.json_depth = json_depth
+        self.message = message
+        self.args = args
+        self.kwargs = kwargs
+
+    def redirect(self, *args, **kwargs):
+        return redirect(args[0], code=kwargs.get('code', 302))
+
+    @property
+    def response(self):
         with self._request_context(
-                html_func, status_code, html_flash, json_fields, json_depth,
-                json_message) as resp:
-            return resp(*args, **kwargs)
+                self.template_name, self.status_code, self.json_fields,
+                self.json_depth, self.message) as resp:
+            return resp(*self.args, **self.kwargs)
 
     @contextmanager
-    def _request_context(self, html_func, status_code=None,
-                         html_flash=None, json_fields=None, json_depth=2,
-                         json_message=''):
-        if self._is_html_request():
-            return partial(self._html_response, html_func, status_code,
-                           html_flash)
+    def _request_context(self, template_name=None, status_code=None,
+                         json_fields=None, json_depth=2,
+                         message=''):
+        response = None
+        if str(status_code).startswith('3'):
+            response = partial(self.redirect, code=302)
+        elif self._is_html_request():
+            response = partial(self._html_response, template_name, status_code,
+                               message)
         elif self._is_json_request():
-            return partial(self._json_response, status_code, json_fields,
-                           json_depth, json_message)
-        raise UnacceptableSoranRequest()
+            response =  partial(self._json_response, status_code, json_fields,
+                                json_depth, message)
+        if not response:
+            raise UnacceptableSoranRequest()
+        yield response
 
-    def _html_response(self, func, status_code, flash_message,
+    def _html_response(self, template_name, status_code, flash_message,
                        *args, **kwargs):
         if flash_message:
             flash(flash_message)
-        return func(*args, **kwargs), status_code
+        # FIXME 40x, 50x 는 멋진 에러페이지 만들어서 처리하기
+        response = None
+        status_stat = int(status_code / 100)
+        if (status_code == 400 and template_name) or status_code == 200:
+            response = (
+                render_template(template_name, *args, **kwargs),
+                status_code
+            )
+        elif status_code == 201:
+            print('hah')
+            print(args)
+            response = self.redirect(*args, code=302)
+        elif status_stat == 4 or status_stat == 5:
+            abort(status_code)
+        else:
+            response = render_template(template_name, *args, **kwargs)
+        print(response)
+        return response
 
     def _json_response(self, status_code, select_fields, depth, message,
                        *args, **kwargs):
@@ -56,6 +141,17 @@ class DynamicResponse:
                     data=data),
             status_code
         )
+
+    def _is_html_request(self):
+        return self._find_request_context() == self.mimetype['html']
+
+    def _is_json_request(self):
+        return self._find_request_context() == self.mimetype['json']
+
+    def _find_request_context(self):
+        if API_ENDPOINT in request.url_rule.endpoint:
+            return self.mimetype['json']
+        return self.mimetype['html']
 
 
 def ok(message='', depth=2, **kwargs):
@@ -68,14 +164,16 @@ def ok(message='', depth=2, **kwargs):
     return jsonify(message=message, data=jsonable(kwargs, depth)), 200
 
 
-def created(message='', depth=2, **kwargs):
-    """Return 201 response.
+def created(template_name=None, redirect_to=None, message='', depth=2,
+            fields='', **kwargs):
+    """Return create response.
 
     :param str message: a message
     :param int depth: parse depth of data.
-    :return: a response that contain a json.
     """
-    return jsonify(message=message, data=jsonable(kwargs, depth)), 201
+    dr = DynamicResponse(
+        template_name, 201, fields, depth, message, redirect_to, **kwargs)
+    return dr.response
 
 
 @singledispatch
@@ -90,9 +188,8 @@ def _(arg, depth=1):
     r = []
     if depth >= 1:
         depth -= 1
-        for item in arg.copy():
+        for item in arg[:]:
             r.append(jsonable(item, depth))
-        return arg
     return r
 
 

@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from flask import json
 from pytest import mark
 
@@ -7,7 +9,7 @@ from soran.web.auth import Token
 from .util import url_for
 
 
-def test_web_create_user(f_session, f_app):
+def test_web_create_user(f_app):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
@@ -16,8 +18,21 @@ def test_web_create_user(f_session, f_app):
             'who': who}
     with f_app.test_client() as client:
         response = client.post(url_for('user.create'), data=data)
+    assert 302 == response.status_code
+    url = urlparse(response.headers.get('Location'))
+    assert url.path == url_for('hello')
+
+
+def test_web_api_create_user(f_session, f_app):
+    username = 'aaa'
+    password = 'abc'
+    service = 'naver'
+    who = 'users'
+    data = {'name': username, 'password': password, 'service': service,
+            'who': who}
+    with f_app.test_client() as client:
+        response = client.post(url_for('user.api@create'), data=data)
     assert 201 == response.status_code
-    assert response.data
     response_data = json.loads(response.data)
     assert response_data
     find_user = f_session.query(User)\

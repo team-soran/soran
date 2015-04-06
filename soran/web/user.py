@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import request, abort, current_app, render_template
+from flask import request, abort, current_app, render_template, url_for
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
 from wtforms import HiddenField, StringField, PasswordField
@@ -48,7 +48,7 @@ def create():
         session.rollback()
         current_app.logger.error(exc)
         abort(500)
-    return created()
+    return created(redirect_to=url_for('hello'), user=user)
 
 
 @bp.route('/users/authorize/', methods=['POST'])

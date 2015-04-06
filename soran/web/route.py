@@ -5,10 +5,13 @@
 from flask import Blueprint, Response as FlaskResponse, request
 
 
-__all__ = 'APIBlueprint', 'API_PREFIX',
+__all__ = 'APIBlueprint', 'API_PREFIX', 'API_ENDPOINT_POSTFIX', 'API_ENDPOINT',
 
 
 API_PREFIX = 'api'
+API_ENDPOINT_POSTFIX = '@'
+API_ENDPOINT = '{prefix}{postfix}'.format(prefix=API_PREFIX,
+                                          postfix=API_ENDPOINT_POSTFIX)
 
 
 class APIBlueprint(Blueprint):
@@ -23,7 +26,9 @@ class APIBlueprint(Blueprint):
             api_prefix = API_PREFIX
             if api:
                 self.add_url_rule('/{}{}'.format(api_prefix, rule),
-                                  '{}@{}'.format(api_prefix, endpoint),
+                                  '{0}{1}{2}'.format(api_prefix,
+                                                     API_ENDPOINT_POSTFIX,
+                                                     endpoint),
                                   f, **options)
             return f
 
