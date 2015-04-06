@@ -31,7 +31,7 @@ app.url_map.converters.update(
 )
 
 
-app.register_blueprint(user.bp, url_prefix='/users')
+app.register_blueprint(user.bp)
 
 
 @app.route('/', methods=['GET'])

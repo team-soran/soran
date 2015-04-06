@@ -3,5 +3,6 @@
 {% from "util/_form.html" import render_form %}
 
 {% block body %}
-  {{ render_form(form) }}
+  {{ render_form(form, {'method': 'POST',
+                        'action': url_for('user.create')}) }}
 {% endblock %}

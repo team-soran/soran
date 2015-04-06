@@ -9,7 +9,7 @@ from sqlalchemy.types import Unicode, TypeDecorator
 import bcrypt
 
 from .db import Base
-from .mixin import ServiceMixin, NameMixin
+from .mixin import ServiceMixin, NameMixin, BaseMixin
 
 
 __all__ = 'Person', 'PasswordType', 'Password', 'User',
