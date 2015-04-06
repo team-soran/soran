@@ -119,18 +119,15 @@ class DynamicResponse:
         status_stat = int(status_code / 100)
         if (status_code == 400 and template_name) or status_code == 200:
             response = (
-                render_template(template_name, *args, **kwargs),
+                render_template(template_name, **kwargs),
                 status_code
             )
         elif status_code == 201:
-            print('hah')
-            print(args)
-            response = self.redirect(*args, code=302)
+            response = self.redirect(template_name, code=302)
         elif status_stat == 4 or status_stat == 5:
             abort(status_code)
         else:
             response = render_template(template_name, *args, **kwargs)
-        print(response)
         return response
 
     def _json_response(self, status_code, select_fields, depth, message,
@@ -154,25 +151,27 @@ class DynamicResponse:
         return self.mimetype['html']
 
 
-def ok(message='', depth=2, **kwargs):
+def ok(template_name=None, message='', depth=2, fields=[], **kwargs):
     """Return 200 response.
 
     :param str message: a message
     :param int depth: parse depth of data.
     :return: a response that contain a json.
     """
-    return jsonify(message=message, data=jsonable(kwargs, depth)), 200
+    dr = DynamicResponse(
+        template_name, 200, fields, depth, message, **kwargs)
+    return dr.response
 
 
 def created(template_name=None, redirect_to=None, message='', depth=2,
-            fields='', **kwargs):
+            fields=[], **kwargs):
     """Return create response.
 
     :param str message: a message
     :param int depth: parse depth of data.
     """
     dr = DynamicResponse(
-        template_name, 201, fields, depth, message, redirect_to, **kwargs)
+        template_name or redirect_to, 201, fields, depth, message, **kwargs)
     return dr.response
 
 
@@ -210,11 +209,10 @@ def _(arg, depth=1):
     if depth >= 1:
         depth -= 1
         o.update({
-            'username': arg.username,
-            'password': arg.password,
+            'name': arg.name,
             'service': arg.service,
             'created_at': jsonable(arg.created_at, depth),
-            'modified_at': jsonable(arg.modified_at, depth)
+            'updated_at': jsonable(arg.updated_at, depth)
         })
     return o
 

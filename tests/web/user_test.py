@@ -77,7 +77,16 @@ def test_web_authorize_user(f_app, f_user):
     data = {'username': f_user.name, 'password': 'password:hello'}
     with f_app.test_client() as client:
         response = client.post(url_for('user.authorize'), data=data)
-    assert 200 == response.status_code
+    assert 302 == response.status_code
+    url = urlparse(response.headers.get('Location'))
+    assert url.path == url_for('hello')
+
+
+def test_web_api_authorize_user(f_app, f_user):
+    data = {'username': f_user.name, 'password': 'password:hello'}
+    with f_app.test_client() as client:
+        response = client.post(url_for('user.api@authorize'), data=data)
+    assert 201 == response.status_code
     assert response.data
     response_data = json.loads(response.data)
     assert 'data' in response_data

@@ -51,7 +51,7 @@ def create():
     return created(redirect_to=url_for('hello'), user=user)
 
 
-@bp.route('/users/authorize/', methods=['POST'])
+@bp.route('/users/authorize/', methods=['POST'], api=True)
 def authorize():
     """Authorize a user and return a token.
     """
@@ -64,7 +64,8 @@ def authorize():
                   .first()
     if not user or user.password != password:
         abort(404)
-    return ok(token=Token(user=user, expired_at=None))
+    return created(redirect_to=url_for('hello'),
+                   token=Token(user=user, expired_at=None))
 
 
 @bp.route('/users/authorize/', methods=['GET'])
