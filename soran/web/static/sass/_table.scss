@@ -1,0 +1,76 @@
+table#listen {
+  margin-top: 20px;
+
+  a {
+    color: #333;
+  }
+
+  a:hover, a:focus {
+    color: #1ABC9C;
+  }
+}
+
+thead {
+  font-weight: bold;
+  font-family: "museo-sans", 'Lato', 'Helvetica Neue', Helvetica, 'Apple SD Gothic Neo', 'Nanum Gothic', 'Malgun Gothic', Arial, sans-serif;
+  font-size: 12pt;
+
+  tr {
+    td:nth-child(1) {
+      width: 50%;
+    }
+    td:nth-child(2) {
+      width: 20%;
+    }
+    td:nth-child(3) {
+      width: 20%;
+    }
+    td:nth-child(4) {
+      text-align: center;
+    }
+    td:hover {
+      cursor: pointer;
+    }
+  }
+
+
+}
+
+tbody {
+  font-size: 9pt;
+
+  tr {
+    td {
+      border-color: #e5e5e5;
+    }
+    td:nth-child(1) {
+      width: 50%;
+    }
+    td:nth-child(2) {
+      width: 20%;
+    }
+    td:nth-child(2) a {
+      opacity: 0.8;
+      font-weight: bold;
+      color: #34495E;
+    }
+    td:nth-child(3) {
+      font-size: 8pt;
+      width: 20%;
+    }
+    td:nth-child(4) {
+      color: #2C3E50;
+      text-align: center;
+      font-family: "bebas-neue", "museo-sans", 'Lato', 'Helvetica Neue', Helvetica, 'Apple SD Gothic Neo', 'Nanum Gothic', 'Malgun Gothic', Arial, sans-serif;
+      font-size: 13pt;
+    }
+    tr:hover {
+      a {
+        color: #16A085 !important;
+      }
+      a:hover, a:focus {
+        color: #1ABC9C;
+      }
+    }
+  }
+}

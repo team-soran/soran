@@ -1,0 +1,14 @@
+div[role=content] {
+  background-color: $white;
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.04);
+  width: 100%;
+
+  div.container {
+    .row {
+      margin-left: auto;
+    }
+
+  }
+}
