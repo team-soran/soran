@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, DateTime
+from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.types import Integer, DateTime
 
 from .db import Base
 
@@ -15,8 +16,8 @@ class Archive(Base):
 
     song_id = Column(Integer, ForeignKey('songs.id'), nullable=False)
 
-    listened_at = Column(DateTime, nullable=False)
+    listened_at = Column(DateTime, nullable=False, default=datetime.now())
 
-    users = relationship('User')
+    user = relationship('User')
 
-    songs = relationship('Song')
+    song = relationship('Song')
