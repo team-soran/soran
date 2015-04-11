@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 
 from soran.album import Album
 from soran.artist import Artist
+from soran.song import Song
 from soran.db import Base, Session
 from soran.user import User
 from soran.web.app import app
@@ -34,6 +35,16 @@ def f_user(f_session):
     f_session.add(user)
     f_session.commit()
     return user
+
+
+@fixture
+def f_song(f_session, f_album):
+    song = Song(name='Could stop that smile?',
+                service='naver',
+                album=f_album)
+    f_session.add(song)
+    f_session.commit()
+    return song
 
 
 @fixture
