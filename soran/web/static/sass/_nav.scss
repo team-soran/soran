@@ -1,0 +1,22 @@
+nav.navbar {
+  margin-bottom: 0;
+
+  li.nav-player > a {
+    line-height: 12pt;
+    padding: 9px 10px 0px 0px;
+    font-size: 9pt;
+  }
+
+  li.nav-player {
+    a {
+      i {
+        color: #1ABC9C;
+        font-size: 11pt;
+      }
+
+      span.typo-capital {
+        color: #1ABC9C;
+      }
+    }
+  }
+}

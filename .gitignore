@@ -19,3 +19,5 @@ venv/
 soran/web/static/bower/*
 build/
 dist/
+
+soran/web/static/css

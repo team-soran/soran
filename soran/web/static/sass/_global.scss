@@ -1,0 +1,99 @@
+@import "color";
+
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+* {
+  -webkit-backface-visibility: 'hidden';
+  -moz-backface-visibility: 'hidden';
+  backface-visibility: 'hidden';
+}
+
+body {
+  background-color: $bg-gray;
+}
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background: $select-green;
+  /* Safari */
+
+  color: $white;
+}
+::-moz-selection {
+  background: #C3CF98;
+  /* Firefox */
+
+  color: $white;
+}
+
+img.typekit-badge {
+  display: none !important;
+}
+
+img.brand-logo {
+  -webkit-transition: all 200ms ease-out;
+  -moz-transition: all 200ms ease-out;
+  -o-transition: all 200ms ease-out;
+  transition: all 200ms ease-out;
+  -webkit-transform: scale(0.7);
+  -moz-transform: scale(0.7);
+  -ms-transform: scale(0.7);
+  -o-transform: scale(0.7);
+  transform: scale(0.7);
+}
+img.brand-logo:hover {
+  -webkit-transition: all 200ms ease-out;
+  -moz-transition: all 200ms ease-out;
+  -o-transition: all 200ms ease-out;
+  transition: all 200ms ease-out;
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transform: scale(1);
+}
+#newsfeed {
+  margin: -45px 0px 20px -40px;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-top: 60px;
+  background-color: $blue-dark;
+  color: $white;
+}
+#newsfeed .thumbnails li:nth-child(4n+5) {
+  margin-left: 0px;
+}
+#newsfeed .thumbnails .thumbnail {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border: 0;
+}
+#newsfeed .thumbnails .thumbnail img {
+  width: 190px;
+  height: 190px;
+}
+#newsfeed .thumbnails .thumbnail .caption {
+  color: #fff;
+  font-size: 8pt;
+}
+#newsfeed .thumbnails .thumbnail .caption h4 {
+  background-color: $blue-dark;
+  line-height: 39px;
+  text-align: center;
+}
+#newsfeed .thumbnails .thumbnail .caption hr {
+  margin: 10px 0;
+}
+.typo-capital {
+  font-family: "museo-sans", 'Lato', 'Helvetica Neue', Helvetica, 'Apple SD Gothic Neo', 'Nanum Gothic', 'Malgun Gothic', Arial, sans-serif;
+}
+.typo-number {
+  font-family: "bebas-neue", "museo-sans", 'Lato', 'Helvetica Neue', Helvetica, 'Apple SD Gothic Neo', 'Nanum Gothic', 'Malgun Gothic', Arial, sans-serif;
+}
+
+@import "table";
+@import "content";

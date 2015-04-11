@@ -7,6 +7,7 @@ install_requires = [
   'html5lib >= 0.999, < 1.0',
   'wtforms >= 2.0.2, < 2.1.0',
   'flask-wtf >= 0.11',
+  'libsass >= 0.7.0, < 0.8.0',
 ]
 
 

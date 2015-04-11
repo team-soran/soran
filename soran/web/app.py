@@ -1,9 +1,15 @@
-from flask import Flask
+from flask import Flask, render_template
+from sassutils.wsgi import SassMiddleware
 
 from . import user
 from .converter import YoutubeConverter
 
 app = Flask(__name__)
+
+
+app.wsgi_app = SassMiddleware(app.wsgi_app, {
+    'soran.web': ('static/sass', 'static/css', '/static/css')
+})
 
 
 def import_python(module_name):
@@ -36,4 +42,4 @@ app.register_blueprint(user.bp)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'hello world :)'
+    return render_template('hello.html')

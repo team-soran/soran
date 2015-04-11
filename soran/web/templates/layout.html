@@ -1,106 +1,114 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+    <head>
 
-    <title>
+        <title>
 
-      {%- block title -%}
-      소란 :: 음악을 듣는 다른 방법
-      {%- endblock -%}
-    </title>
-    <meta charset="utf-8">
+          {%- block title -%}
+          소란 :: 음악을 듣는 다른 방법
+          {%- endblock -%}
+        </title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8">
 
-    <link href="{{ url_for('static', filename='bower/flat-ui/dist/css/vendor/bootstrap.min.css') }}"
-          rel="stylesheet" />
-    <link href="{{ url_for('static', filename='bower/flat-ui/dist/css/flat-ui.min.css') }}"
-          rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/form.css') }}"
-          rel="stylesheet" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--[if lt IE 9]>
-      <script src="{{ url_for('static', filename='bower/flat-ui/dist/js/vendor/html5shiv.js') }}"></script>
-      <script src="{{ url_for('static', filename='bower/flat-ui/dist/js/vendor/respond.min.js') }}"></script>
-    <![endif-->
+        <link href="{{ url_for('static', filename='bower/flat-ui/dist/css/vendor/bootstrap.min.css') }}"
+              rel="stylesheet" />
+        <link href="{{ url_for('static', filename='bower/flat-ui/dist/css/flat-ui.min.css') }}"
+              rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/form.scss.css') }}"
+              rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/main.scss.css') }}"
+              rel="stylesheet" />
 
-    <!--
+        <!--[if lt IE 9]>
+          <script src="{{ url_for('static', filename='bower/flat-ui/dist/js/vendor/html5shiv.js') }}"></script>
+          <script src="{{ url_for('static', filename='bower/flat-ui/dist/js/vendor/respond.min.js') }}"></script>
+        <![endif-->
+
+        <!--
 
 
 
-    <link href="@routes.Assets.at("stylesheets/font-awesome.css")" rel="stylesheet" />
-    <link href="@routes.Assets.at("images/favicon.png")" rel="shortcut icon" type="image/png">
-    -->
-    <link href="{{ url_for('static', filename='images/favicon.png') }}" rel="shortcut icon" type="image/png" />
+        <link href="@routes.Assets.at("stylesheets/font-awesome.css")" rel="stylesheet" />
+        <link href="@routes.Assets.at("images/favicon.png")" rel="shortcut icon" type="image/png">
+        -->
+        <link href="{{ url_for('static', filename='images/favicon.png') }}" rel="shortcut icon" type="image/png" />
 
-  </head>
-  <body>
-    <header>
+    </head>
 
-      <nav class="navbar navbar-default">
+    <body>
+        <header>
+
+            <div class="row">
+                <nav class="navbar navbar-default">
+                    <div class="container">
+                            <div class="navbar-header">
+                            <a class="navbar-brand" href="#">
+                                <img class ="brand-logo" src="{{ url_for('static', filename='images/logo-mask.png') }}" width=30 />
+                            </a>
+                         </div>
+
+                       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                           <ul class="nav navbar-nav">
+                               <li><a href="#">Link</a></li>
+                           </ul>
+                       </div>
+
+                    </div>
+                </nav>
+            </div>
+
+        </header>
+
+    <div role="content">
         <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-              <img src="{{ url_for('static', filename='images/logo-mask.png') }}" width=30 />
-              소란
-            </a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-
+            {%- block body -%}
+            {%- endblock -%}
         </div>
-      </nav>
-
-    </header>
-
-    <div class="container" role="content">
-      {%- block body -%}
-      {%- endblock -%}
     </div>
 
     <footer>
-      <div class="container">
+        <div class="container">
 
-          <div class="span5">
-            <div class="footer-banner">
-              <h3 class="footer-title">관련 링크</h3>
-              <ul>
+            <div class="row footer-banner">
+            <h3 class="footer-title">관련 링크</h3>
+
+            <ul>
                 <li>
-                  <a href="https://github.com/orgs/team-soran/people">
-                  개발자들
-                  </a>
+                    <a href="https://github.com/orgs/team-soran/people">
+                    개발자들
+                    </a>
                 </li>
                 <li>
-                  <a href="http://bugs.co.kr">
+                    <a href="http://bugs.co.kr">
                     벅스
-                  </a>
+                    </a>
                 </li>
                 <li>
-                  <a href="http://music.naver.com">
+                    <a href="http://music.naver.com">
                     네이버 뮤직
-                  </a>
+                    </a>
                 </li>
                 <li>
-                  <a href="https://github.com/orgs/team-soran">
+                    <a href="https://github.com/orgs/team-soran">
                     github
-                  </a>
+                    </a>
                 </li>
-              </ul>
-              <p>
+            </ul>
+
+            <p>
                 소란은 오픈소스프로젝트로 만들어집니다. 여러분도 <a href="https://github.com/orgs/team-soran">참여</a>해보세요.
-              </p>
-              © 2015 SORAN 소란 서비스 팀
+            </p>
+
+            © 2015 SORAN 소란 서비스 팀
             </div>
-          </div>
+
         </div>
-      </div>
     </footer>
 
     <script src="{{ url_for('static', filename='bower/jquery/dist/jquery.min.js') }}">
@@ -111,5 +119,5 @@
     {%- block script -%}
     {%- endblock -%}
 
-  </body>
+    </body>
 </html>
