@@ -3,7 +3,8 @@
 
 """
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.types import Integer
 
 from .db import Base
 from .mixin import NameMixin, ServiceMixin

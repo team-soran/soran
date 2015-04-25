@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 
 from soran.album import Album
 from soran.artist import Artist
-from soran.song import Song
 from soran.db import Base, Session
+from soran.song import Song
 from soran.user import User
 from soran.web.app import app
 

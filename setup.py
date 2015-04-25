@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_package, ssetup
 
 
 install_requires = [
@@ -12,7 +12,7 @@ install_requires = [
 
 
 test_require = [
-    'pytest => 2.7.0, < 2.8.0',
+    'pytest >= 2.7.0, < 2.8.0',
 ]
 
 

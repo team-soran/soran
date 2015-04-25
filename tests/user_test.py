@@ -1,6 +1,6 @@
-from soran.user import User
-
 from pytest import fixture
+
+from soran.user import User
 
 
 def test_create_user(f_session):

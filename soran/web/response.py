@@ -2,16 +2,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from datetime import datetime, date
 from contextlib import contextmanager
-from functools import singledispatch, partial
+from datetime import date, datetime
+from functools import partial, singledispatch
 
-from flask import (jsonify, request, flash, redirect, abort, render_template,\
-                   redirect as flask_redirect)
+from flask import abort, flash, jsonify, redirect, render_template, request
 
 from ..user import User
 from .auth import Token
-from .route import API_PREFIX, API_ENDPOINT
+from .route import API_ENDPOINT
 
 
 __all__ = 'ok', 'created', 'jsonable',
@@ -29,46 +28,46 @@ class DynamicResponse:
     }
 
     available_status_codes = [
-        100, # Continue
-        101, # Switching Protocols
-        200, # OK
-        201, # Created
-        202, # Accepted
-        203, # Non-Authoritative Information
-        204, # No Content
-        205, # Reset Content
-        206, # Partial Content
-        300, # Multiple Choices
-        301, # Moved Permanently
-        302, # Found
-        303, # See Other
-        304, # Not Modified
-        305, # Use Proxy
-        307, # Temporary Redirect
-        400, # Bad Request
-        401, # Unauthorized
-        402, # Payment Required
-        403, # Forbidden
-        404, # Not Found
-        405, # Method Not Allowed
-        406, # Not Acceptable
-        407, # Proxy Authentication Required
-        408, # Request Time-out
-        409, # Conflict
-        410, # Gone
-        411, # Length Required
-        412, # Precondition Failed
-        413, # Request Entity Too Large
-        414, # Request-URI Too Large
-        415, # Unsupported Media Type
-        416, # Requested range not satisfiable
-        417, # Expectation Failed
-        500, # Internal Server Error
-        501, # Not Implemented
-        502, # Bad Gateway
-        503, # Service Unavailable
-        504, # Gateway Time-out
-        505, # HTTP Version not supported
+        100,  # Continue
+        101,  # Switching Protocols
+        200,  # OK
+        201,  # Created
+        202,  # Accepted
+        203,  # Non-Authoritative Information
+        204,  # No Content
+        205,  # Reset Content
+        206,  # Partial Content
+        300,  # Multiple Choices
+        301,  # Moved Permanently
+        302,  # Found
+        303,  # See Other
+        304,  # Not Modified
+        305,  # Use Proxy
+        307,  # Temporary Redirect
+        400,  # Bad Request
+        401,  # Unauthorized
+        402,  # Payment Required
+        403,  # Forbidden
+        404,  # Not Found
+        405,  # Method Not Allowed
+        406,  # Not Acceptable
+        407,  # Proxy Authentication Required
+        408,  # Request Time-out
+        409,  # Conflict
+        410,  # Gone
+        411,  # Length Required
+        412,  # Precondition Failed
+        413,  # Request Entity Too Large
+        414,  # Request-URI Too Large
+        415,  # Unsupported Media Type
+        416,  # Requested range not satisfiable
+        417,  # Expectation Failed
+        500,  # Internal Server Error
+        501,  # Not Implemented
+        502,  # Bad Gateway
+        503,  # Service Unavailable
+        504,  # Gateway Time-out
+        505,  # HTTP Version not supported
     ]
 
     def __init__(self, template_name=None, status_code=None, json_fields=None,
@@ -104,8 +103,8 @@ class DynamicResponse:
             response = partial(self._html_response, template_name, status_code,
                                message)
         elif self._is_json_request():
-            response =  partial(self._json_response, status_code, json_fields,
-                                json_depth, message)
+            response = partial(self._json_response, status_code, json_fields,
+                               json_depth, message)
         if not response:
             raise UnacceptableSoranRequest()
         yield response
@@ -173,6 +172,14 @@ def created(template_name=None, redirect_to=None, message='', depth=2,
     dr = DynamicResponse(
         template_name or redirect_to, 201, fields, depth, message, **kwargs)
     return dr.response
+
+
+def bad_syntax():
+    pass
+
+
+def internal_server_error():
+    pass
 
 
 @singledispatch

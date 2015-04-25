@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+flake8 --ignore=F811 soran
+import-order ./soran soran

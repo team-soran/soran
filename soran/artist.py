@@ -3,7 +3,8 @@
 
 """
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.types import Integer
 
 from .db import Base
 from .mixin import BaseMixin
@@ -39,4 +40,3 @@ class Artist(Person):
     __tablename__ = 'artists'
 
     __mapper_args__ = {'polymorphic_identity': 'artists'}
-

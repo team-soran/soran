@@ -4,9 +4,9 @@
 """
 from datetime import datetime
 
-from sqlalchemy.schema import Column
 from sqlalchemy.orm import validates
-from sqlalchemy.types import Integer, Unicode, DateTime
+from sqlalchemy.schema import Column
+from sqlalchemy.types import DateTime, Integer, Unicode
 
 
 __all__ = 'BaseMixin', 'ServiceMixin', 'NameMixin',

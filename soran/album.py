@@ -3,10 +3,11 @@
 
 """
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.types import Integer
 
 from .db import Base
-from .mixin import BaseMixin, ServiceMixin, NameMixin
+from .mixin import BaseMixin, NameMixin, ServiceMixin
 
 
 __all__ = 'AlbumArtistAssoc', 'Album',
@@ -23,7 +24,6 @@ class AlbumArtistAssoc(Base, BaseMixin):
     artists = relationship('Artist')
 
     __tablename__ = 'album_artist_assoc'
-
 
 
 class Album(Base, NameMixin, ServiceMixin):

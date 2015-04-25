@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Blueprint, Response as FlaskResponse, request
+from flask import Blueprint
 
 
 __all__ = 'APIBlueprint', 'API_PREFIX', 'API_ENDPOINT_POSTFIX', 'API_ENDPOINT',

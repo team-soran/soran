@@ -2,17 +2,18 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import request, abort, current_app, render_template, url_for
+from flask import abort, current_app, render_template, request, url_for
 from flask_wtf import Form
 from sqlalchemy.exc import IntegrityError
-from wtforms import HiddenField, StringField, PasswordField
+
+from wtforms import HiddenField, PasswordField, StringField
 from wtforms.validators import input_required
 
 from ..db import session
-from soran.web.route import APIBlueprint
 from ..user import User
 from .auth import Token
-from .response import ok, created
+from .response import created
+from .route import APIBlueprint
 
 
 bp = APIBlueprint('user', __name__, template_folder='templates/user')

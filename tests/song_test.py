@@ -1,6 +1,4 @@
 from soran.song import Song
-from soran.album import Album
-from soran.artist import Artist
 
 from pytest import fixture
 

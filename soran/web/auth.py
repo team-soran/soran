@@ -4,13 +4,14 @@
 """
 from datetime import datetime, timedelta
 
-from flask import current_app, json
+from flask import current_app
 from itsdangerous import JSONWebSignatureSerializer
 
 from ..db import session
 from ..user import User
 
 __all__ = 'Token',
+
 
 class Token:
     EXPIRED_DAYS = 1000

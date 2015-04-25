@@ -2,10 +2,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Blueprint, jsonify
+from flask import Blueprint
+from werkzeug.exceptions import InternalServerError
 
 from .response import ok
-from ..db import session
 
 
 bp = Blueprint('youtube', __name__, template_folder='templates/youtube')
@@ -20,5 +20,5 @@ def find(youtube):
     except Exception as e:
         return ok(message=e.message)
     if not youtube.metadata:
-        abort(500)
+        raise InternalServerError()
     return ''

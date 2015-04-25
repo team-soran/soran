@@ -2,14 +2,13 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+import bcrypt
 from sqlalchemy import Integer
 from sqlalchemy.schema import Column, ForeignKey
-from sqlalchemy.types import Unicode, TypeDecorator
-
-import bcrypt
+from sqlalchemy.types import TypeDecorator, Unicode
 
 from .db import Base
-from .mixin import ServiceMixin, NameMixin, BaseMixin
+from .mixin import NameMixin, ServiceMixin
 
 
 __all__ = 'Person', 'PasswordType', 'Password', 'User',

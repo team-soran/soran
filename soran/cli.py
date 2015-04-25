@@ -1,20 +1,18 @@
-import os
 import logging.config
 
-from flask import current_app
-from flask.ext.script import Manager, prompt_bool, Shell
 from alembic.command import (
-    revision as alembic_revision,
-    upgrade as alembic_upgrade,
+    branches as alembic_branch,
+    current as alembic_current,
     downgrade as alembic_downgrade,
     history as alembic_history,
-    branches as alembic_branch,
-    current as alembic_current
+    revision as alembic_revision,
+    upgrade as alembic_upgrade
 )
+from flask.ext.script import Manager, Shell, prompt_bool
 
-from .web.app import app
 from .config import read_config
-from .db import session, get_engine, get_alembic_config
+from .db import get_alembic_config, get_engine, session
+from .web.app import app
 
 ALEMBIC_LOGGING = {
     'version': 1,
@@ -46,6 +44,7 @@ ALEMBIC_LOGGING = {
         }
     }
 }
+
 
 @Manager
 def manager(config_path=None):
@@ -94,7 +93,7 @@ def branches():
 def current():
     """현재 리비전이 어떤 리비전인지 보여줍니다.
     """
-    return alembic_current(alembc_config())
+    return alembic_current(alembic_config())
 
 
 @manager.option('--message', '-m', dest='message', default=None)
