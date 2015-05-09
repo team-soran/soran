@@ -4,7 +4,7 @@
 """
 from flask import Blueprint
 
-from .response import ok, bad_syntax
+from .response import bad_syntax, ok
 
 
 bp = Blueprint('youtube', __name__, template_folder='templates/youtube')
