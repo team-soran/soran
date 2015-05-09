@@ -174,12 +174,27 @@ def created(template_name=None, redirect_to=None, message='', depth=2,
     return dr.response
 
 
-def bad_syntax():
-    pass
+def bad_syntax(template_name=None, message='', depth=2, fields=[], **kwargs):
+    dr = DynamicResponse(
+        template_name, 400, fields, depth, message, **kwargs)
+    return dr.response
 
 
-def internal_server_error():
-    pass
+def internal_server_error(template_name=None, message='', depth=2,
+                          fields=[], **kwargs):
+    """Return Internal server error.
+
+    :param template_name:
+    :param message:
+    :param depth:
+    :param fields:
+    :param kwargs:
+    :return:
+    """
+    dr = DynamicResponse(
+        template_name, 500, fields, depth, message, **kwargs
+    )
+    return dr.response
 
 
 @singledispatch

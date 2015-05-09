@@ -11,9 +11,12 @@ class Youtube:
 
     def __init__(self, id_):
         self.id_ = id_
-        self.metadata = {}
+        self._metadata = {}
 
-    def request_metadata(self):
+    @property
+    def metadata(self):
+        if self._metadata:
+            return self._metadata
         response = urlopen(self.to_url)
         if response.status != 200:
             raise Exception('status_code: {}, url: {}'.format(
@@ -30,8 +33,8 @@ class Youtube:
             elem = html.findall(xpath_builder(attr=attr, value=value))
             if elem:
                 self.metadata[value] = elem[0].get('content')
-            self.metadata.setdefault(value, None)
-        return self.metadata
+            self._metadata.setdefault(value, None)
+        return self._metadata
 
     @property
     def to_url(self):

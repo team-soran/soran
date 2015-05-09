@@ -1,8 +1,13 @@
+""":mod:`soran.web.app` --- soran web app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
 from flask import Flask, render_template
 from sassutils.wsgi import SassMiddleware
 
-from . import user
+from . import user, youtube
 from .converter import YoutubeConverter
+
 
 app = Flask(__name__)
 
@@ -22,14 +27,8 @@ def import_python(module_name):
         return None
 
 
-def python_isinstance(obj, cls):
-    if not cls or type(cls) is not type:
-        return False
-    return isinstance(obj, cls)
-
-
 app.add_template_global(import_python, 'import_python')
-app.add_template_global(python_isinstance, 'isinstance')
+app.add_template_global(isinstance, 'isinstance')
 
 
 app.url_map.converters.update(
@@ -38,6 +37,7 @@ app.url_map.converters.update(
 
 
 app.register_blueprint(user.bp)
+app.register_blueprint(youtube.bp)
 
 
 @app.route('/', methods=['GET'])

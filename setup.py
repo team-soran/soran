@@ -1,4 +1,4 @@
-from setuptools import find_package, ssetup
+from setuptools import find_package, setup
 
 
 install_requires = [
@@ -11,7 +11,7 @@ install_requires = [
 ]
 
 
-test_require = [
+tests_require = [
     'pytest >= 2.7.0, < 2.8.0',
 ]
 
@@ -28,10 +28,10 @@ setup(
     author_email='hyojun@admire.kr',
     packages=find_packages(),
     install_requires=install_requires,
-    tests_require=test_require,
+    tests_require=tests_require,
     extras_require={
         'docs': docs_require,
-        'tests': test_require
+        'tests': tests_require,
     },
     entry_points='''
         [console_scripts]

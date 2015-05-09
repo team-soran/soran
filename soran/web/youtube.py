@@ -3,22 +3,21 @@
 
 """
 from flask import Blueprint
-from werkzeug.exceptions import InternalServerError
 
-from .response import ok
+from .response import ok, bad_syntax
 
 
 bp = Blueprint('youtube', __name__, template_folder='templates/youtube')
 
 
-@bp.route('/<youtube:youtube>/', methods=['GET'])
+@bp.route('/youtube/<youtube:youtube>/', methods=['GET'])
 def find(youtube):
-    """Find meta data for given youtube.
+    """Find meta data for given ``youtube`` .
     """
     try:
         youtube.request_metdata()
     except Exception as e:
         return ok(message=e.message)
     if not youtube.metadata:
-        raise InternalServerError()
+        return bad_syntax()
     return ''
