@@ -2,11 +2,17 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+import datetime as py_datetime
 from functools import partial
+
+from annotation.typed import optional
+
+from . import datetime
 
 
 __all__ = ('FloatArgument', 'Argument', 'Validator', 'TypeArgument',
-           'IntArgument', 'is_float', 'is_int', 'is_this_type', 'required')
+           'IntArgument', 'is_datetime', 'is_float', 'is_int', 'is_this_type',
+           'required')
 
 
 def is_this_type(type_: type, data) -> bool:
@@ -58,6 +64,15 @@ def required(data) -> bool:
     return bool(data)
 
 
+def is_datetime(data) -> bool:
+    result = True
+    try:
+        datetime.parse(data)
+    except Exception:
+        result = False
+    return result
+
+
 class Argument:
     """Represent payload's argument.
 
@@ -100,10 +115,11 @@ class Argument:
                 self.errors.append(valid_func.__name__)
         return result
 
+    def convert(self, data):
+        return data
+
     def populate(self, data):
-        if hasattr(self, 'convert'):
-            self.d = self.convert(data)
-        self.d = data
+        self.d = self.convert(data)
 
 
 class TypeArgument(Argument):
@@ -157,6 +173,22 @@ class FloatArgument(TypeArgument):
                  default: float=None):
         super(FloatArgument, self).__init__(float, validators=validators,
                                             name=name, default=default)
+
+
+class DatetimeArgument(Argument):
+
+    def __init__(self, validators: list=[], default: optional(datetime)=None,
+                 name: optional(str)=None):
+        validators.append(is_datetime)
+        super(DatetimeArgument, self).__init__(validators=validators,
+                                               name=name,
+                                               default=default)
+
+    def convert(self, data):
+        if not (isinstance(data, py_datetime.datetime) or
+                isinstance(data, py_datetime.date)):
+            return datetime.parse(data)
+        return data
 
 
 class Validator:

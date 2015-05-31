@@ -17,7 +17,7 @@ dosen't contain a timezone by default.
 
 """
 from datetime import date, datetime as py_datetime
-from functools import singledispatch, partial
+from functools import partial, singledispatch
 
 from annotation.typed import typechecked
 from iso8601 import parse_date
