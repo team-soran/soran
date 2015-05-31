@@ -51,7 +51,7 @@ def get_alembic_config(engine):
         raise Exception('boilerplate.db.get_alembic_config: engine is not'
                         '`Engine`')
     config = Config()
-    config.set_main_option('script_location', 'boilerplate:migrations')
+    config.set_main_option('script_location', 'soran:migrations')
     config.set_main_option('sqlalchemy.url', str(engine.url))
     return config
 
