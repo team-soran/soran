@@ -2,7 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from wtforms import Form, FormField, HiddenField
+from flask_wtf import Form
+from wtforms import FormField, HiddenField
 from wtforms.validators import InputRequired
 
 from ...service import SORAN
