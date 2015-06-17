@@ -1,5 +1,10 @@
 #!/bin/sh
 set -e
 
+echo "Running pre-cmmit"
+
+echo "Flake8 ..."
 flake8 --exclude=./soran/migrations --ignore=F811 soran
+
+echo "import-order ..."
 import-order ./soran soran
