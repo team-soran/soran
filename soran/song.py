@@ -14,8 +14,7 @@ __all__ = 'Song',
 
 
 class Song(Base, NameMixin, ServiceMixin):
-    """Soran song model.
-    """
+    """Soran song model."""
 
     album_id = Column(Integer, ForeignKey('albums.id'))
 
