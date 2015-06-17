@@ -8,6 +8,8 @@ install_requires = [
   'wtforms >= 2.0.2, < 2.1.0',
   'flask-wtf >= 0.11',
   'libsass >= 0.7.0, < 0.8.0',
+  'iso8601 >= 0.1.10, < 0.2.0',
+  'typeannotations >= 0.1.0',
 ]
 
 

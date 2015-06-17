@@ -8,11 +8,14 @@ from sqlalchemy.orm import validates
 from sqlalchemy.schema import Column
 from sqlalchemy.types import DateTime, Integer, Unicode
 
+from .service import BUGS, NAVER, SORAN, YOUTUBE
+
 
 __all__ = 'BaseMixin', 'ServiceMixin', 'NameMixin',
 
 
-class BaseMixin:
+class BaseMixin(object):
+    """pk가 필요한 모든 모델이 상속받는 믹스인"""
 
     id = Column(Integer, primary_key=True)
 
@@ -30,11 +33,14 @@ class BaseMixin:
             self, ', '.join(represents), hex(id(self)))
 
 
-class ServiceMixin:
+class ServiceMixin(object):
+    """소란에서 이용가능한 서비스들의 집합 """
 
-    default_services = set(['naver', 'bugs', 'youtube', 'soran'])
+    default_services = set([NAVER, BUGS, YOUTUBE, SORAN])
 
     service = Column(Unicode, nullable=False)
+
+    service_id = Column(Unicode, nullable=True)
 
     @validates('service')
     def validate_service(self, key, service):

@@ -6,7 +6,9 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from functools import partial, singledispatch
 
-from flask import abort, flash, jsonify, redirect, render_template, request
+from annotation.typed import optional, typechecked, union
+from flask import (Response, abort, flash, jsonify, redirect, render_template,
+                   request)
 
 from ..user import User
 from .auth import Token
@@ -17,16 +19,29 @@ __all__ = 'ok', 'created', 'jsonable',
 
 
 class UnacceptableSoranRequest(Exception):
+    """Raise :class:`~DynamicResponse` is unavailable."""
+
     pass
 
 
 class DynamicResponse:
+    """Create appropriate HTTP response.
 
+    :param str template_name:
+    :param int status_code:
+    :param list json_fields:
+    :param int json_depth:
+    :param str message:
+
+    """
+
+    #: Support mimetype.
     mimetype = {
         'html': 'text/html',
         'json': 'application/json'
     }
 
+    #: Available status codes of HTTP response
     available_status_codes = [
         100,  # Continue
         101,  # Switching Protocols
@@ -70,8 +85,12 @@ class DynamicResponse:
         505,  # HTTP Version not supported
     ]
 
-    def __init__(self, template_name=None, status_code=None, json_fields=None,
-                 json_depth=2, message='', *args, **kwargs):
+    @typechecked
+    def __init__(self, template_name: optional(str)=None,
+                 status_code: optional(int)=None,
+                 json_fields: union(tuple, list)=None,
+                 json_depth: optional(int)=2, message: str='',
+                 *args, **kwargs):
         if status_code not in self.available_status_codes:
             raise ValueError('Invalid status code: {}'.format(status_code))
         self.template_name = template_name
@@ -82,20 +101,47 @@ class DynamicResponse:
         self.args = args
         self.kwargs = kwargs
 
-    def redirect(self, *args, **kwargs):
+    @typechecked
+    def redirect(self, *args, **kwargs) -> Response:
+        """Redirect to given url."""
         return redirect(args[0], code=kwargs.get('code', 302))
 
     @property
-    def response(self):
+    def response(self) -> Response:
+        """Create a response.
+
+        It provide various response depends on given argument. if you want to
+        return a response, then create :class:`~DynamicResponse` and
+        call :attr:`DynamicResponse.response` .
+
+        .. code-block:: python
+
+           def make_response(...):
+               dr = DynamicResponse(...)
+               return dr.response
+
+        """
         with self._request_context(
                 self.template_name, self.status_code, self.json_fields,
                 self.json_depth, self.message) as resp:
             return resp(*self.args, **self.kwargs)
 
+    @typechecked
     @contextmanager
-    def _request_context(self, template_name=None, status_code=None,
-                         json_fields=None, json_depth=2,
-                         message=''):
+    def _request_context(self, template_name: optional(str)=None,
+                         status_code: optional(int)=None,
+                         json_fields: union(list, tuple)=None,
+                         json_depth: int=2,
+                         message: str=''):
+        """Create request context which provide appropriate response fucntion.
+
+        :param str template_name:
+        :param int status_code:
+        :param list json_fields:
+        :param int json_depth:
+        :param str message:
+        :return:
+        """
         response = None
         if str(status_code).startswith('3'):
             response = partial(self.redirect, code=302)
@@ -111,6 +157,15 @@ class DynamicResponse:
 
     def _html_response(self, template_name, status_code, flash_message,
                        *args, **kwargs):
+        """Return html response.
+
+        :param template_name:
+        :param status_code:
+        :param flash_message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if flash_message:
             flash(flash_message)
         # FIXME 40x, 50x 는 멋진 에러페이지 만들어서 처리하기
@@ -131,6 +186,16 @@ class DynamicResponse:
 
     def _json_response(self, status_code, select_fields, depth, message,
                        *args, **kwargs):
+        """Return json response.
+
+        :param status_code:
+        :param select_fields:
+        :param depth:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         data = jsonable(args, depth) if args else jsonable(kwargs, depth)
         return (
             jsonify(message=message,
@@ -164,7 +229,7 @@ def ok(template_name=None, message='', depth=2, fields=[], **kwargs):
 
 def created(template_name=None, redirect_to=None, message='', depth=2,
             fields=[], **kwargs):
-    """Return create response.
+    """Return 201 response.
 
     :param str message: a message
     :param int depth: parse depth of data.

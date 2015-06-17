@@ -1,5 +1,5 @@
 from soran.user import User
-from soran.web.user import CreateUserForm
+from soran.web.forms.user import CreateUserForm
 
 from ._helper import formify
 
