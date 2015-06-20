@@ -14,8 +14,8 @@ def test_create_user(f_session):
     f_session.add(user)
     f_session.commit()
     find_user = f_session.query(User)\
-                .filter(User.name == username)\
-                .first()
+                         .filter(User.name == username)\
+                         .first()
     assert find_user
     assert hasattr(find_user, 'id')
     assert find_user.id
@@ -33,23 +33,15 @@ def test_sign_up_form():
         'name': wtforms.StringField,
         'who': wtforms.HiddenField,
         'service': wtforms.HiddenField,
-        'password': wtforms.PasswordField
+        'password': wtforms.PasswordField,
     }
-    for field, cls in fields.items():
-        assert cls == getattr(CreateUserForm, field).field_class
+    for field in fields.items():
+        assert isinstance(CreateUserForm, field)
 
 
-def test_required():
-    form = CreateUserForm()
-    form.process()
+def test_input_sign_up_form_():
+    form = CreateUserForm(name='abc', who='seotaiji', service='naver', password='aaa')
     assert form.validate()
-    expected = {
-        'name': ['This field is required.'],
-        'who': ['This field is required.'],
-        'service': ['This field is required.'],
-        'password': ['This field is required.']
-    }
-    assert form.errors == expected
 
 
 @fixture
