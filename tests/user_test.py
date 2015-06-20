@@ -39,7 +39,7 @@ def test_sign_up_form():
         assert isinstance(CreateUserForm, field)
 
 
-def test_input_sign_up_form_():
+def test_input_sign_up_form():
     form = CreateUserForm(name='abc', who='seotaiji', service='naver', password='aaa')
     assert form.validate()
 
