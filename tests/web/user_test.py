@@ -130,8 +130,10 @@ def test_web_sign_up_form(f_app):
         service = 'naver'
         who = 'users'
         form = CreateUserForm(formdata=MultiDict([
-                             ('name', username), ('password', password),
-                             ('service', service), ('who', who)
+            ('name', username),
+            ('password', password),
+            ('service', service),
+            ('who', who),
         ]))
         assert form.validate()
         form.populate_obj(user)
@@ -139,6 +141,3 @@ def test_web_sign_up_form(f_app):
         assert user.password == password
         assert user.service == service
         assert user.who == who
-
-
-
