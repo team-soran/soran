@@ -1,9 +1,6 @@
 from pytest import fixture
 
 from soran.user import User
-from soran.web.user import CreateUserForm
-
-import wtforms
 
 
 def test_create_user(f_session):
@@ -26,22 +23,6 @@ def test_create_user(f_session):
     assert username == find_user.name
     assert password == find_user.password
     assert service == find_user.service
-
-
-def test_sign_up_form():
-    fields = {
-        'name': wtforms.StringField,
-        'who': wtforms.HiddenField,
-        'service': wtforms.HiddenField,
-        'password': wtforms.PasswordField,
-    }
-    for field in fields.items():
-        assert isinstance(CreateUserForm, field)
-
-
-def test_input_sign_up_form():
-    form = CreateUserForm(name='abc', who='seotaiji', service='naver', password='aaa')
-    assert form.validate()
 
 
 @fixture

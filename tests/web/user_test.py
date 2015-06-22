@@ -5,6 +5,9 @@ from pytest import mark
 
 from soran.user import User
 from soran.web.auth import Token
+from soran.web.user import CreateUserForm
+
+from werkzeug.datastructures import MultiDict
 
 from .util import url_for
 
@@ -36,8 +39,8 @@ def test_web_api_create_user(f_session, f_app):
     response_data = json.loads(response.data)
     assert response_data
     find_user = f_session.query(User)\
-                .filter(User.name == username)\
-                .first()
+                         .filter(User.name == username)\
+                         .first()
     assert find_user
     assert hasattr(find_user, 'id')
     assert find_user.id
@@ -117,3 +120,25 @@ def test_web_api_create_user(f_app):
     with f_app.test_client() as client:
         response = client.post(url_for('user.api@create'), data=data)
     assert response.status_code == 201
+
+
+def test_web_sign_up_form(f_app):
+    with f_app.test_request_context():
+        user = User()
+        username = 'seotaiji'
+        password = 'abc'
+        service = 'naver'
+        who = 'users'
+        form = CreateUserForm(formdata=MultiDict([
+                             ('name', username), ('password', password),
+                             ('service', service), ('who', who)
+        ]))
+        assert form.validate()
+        form.populate_obj(user)
+        assert user.name == username
+        assert user.password == password
+        assert user.service == service
+        assert user.who == who
+
+
+
