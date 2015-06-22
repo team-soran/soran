@@ -1,7 +1,10 @@
 import os
 
+from annotation.typed import typechecked
 
-def read_config(filename):
+
+@typechecked
+def read_config(filename: str) -> dict:
     path = os.environ.get('SORAN_CONFIG', None) or filename
     config = {}
     if path is None:

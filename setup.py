@@ -2,8 +2,10 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-  'flask == 0.10.1', 'flask-script == 2.0.5', 'sqlalchemy == 0.9.8',
-  'alembic == 0.7.4', 'itsdangerous == 0.24', 'bcrypt == 1.1.0',
+  'flask == 0.10.1', 'flask-script == 2.0.5',
+  'sqlalchemy >= 1.0.0, < 1.1',
+  'alembic >= 0.7.4, < 0.8.0',
+  'itsdangerous == 0.24', 'bcrypt == 1.1.0',
   'html5lib >= 0.999, < 1.0',
   'wtforms >= 2.0.2, < 2.1.0',
   'libsass >= 0.7.0, < 0.8.0',

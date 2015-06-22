@@ -1,9 +1,10 @@
 from alembic.config import Config
-from flask import current_app, g
+from annotation.typed import typechecked, optional
+from flask import current_app, g, Flask
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session as SqlalchemySession
 from werkzeug.local import LocalProxy
 
 
@@ -11,7 +12,8 @@ __all__ = ('Base', 'ensure_shutdown_session', 'get_engine', 'get_session',
            'session', 'Session')
 
 
-def ensure_shutdown_session(app):
+@typechecked
+def ensure_shutdown_session(app: Flask):
     """:py:attr:`dam.web.app.app` 의 문맥이 종료될때,
     :py:attr:`dam.db.session` 이 반드시 닫히도록 합니다.
 
@@ -26,7 +28,8 @@ def ensure_shutdown_session(app):
     app.teardown_appcontext(close_session)
 
 
-def get_engine():
+@typechecked
+def get_engine() -> Engine:
     """DB 연결에 필요한 엔진을 생성합니다.
 
     :return: :py:mod:`sqlalchemy` 의 엔진
@@ -39,7 +42,8 @@ def get_engine():
     return config['DATABASE_ENGINE']
 
 
-def get_alembic_config(engine):
+@typechecked
+def get_alembic_config(engine: Engine) -> Config:
     """:py:mod:`alembic` 에필요한 설정을 가져옵니다.
 
     :param engine: db에 연결할 :py:class:`sqlalchemy.engine.Engine` 인스턴스
@@ -56,7 +60,8 @@ def get_alembic_config(engine):
     return config
 
 
-def get_session(engine=None):
+@typechecked
+def get_session(engine: optional(Engine)=None) -> SqlalchemySession:
     """:py:mod:`sqlalchemy` 의 쿼리를 날릴때 사용하는 세션을 가지고옵니다.
 
     :param sqlalchemy.engine.Engine engine: :py:mod:`sqlalchemy` 엔진

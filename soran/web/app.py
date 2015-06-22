@@ -17,7 +17,7 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 })
 
 
-def import_python(module_name):
+def import_python(module_name: str):
     modules = module_name.split(':')
     if len(modules) != 2:
         return None
@@ -42,4 +42,8 @@ app.register_blueprint(youtube.bp)
 
 @app.route('/', methods=['GET'])
 def hello():
+    """메인 핸들러
+
+    :return:
+    """
     return render_template('hello.html')

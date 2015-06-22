@@ -12,7 +12,7 @@ from werkzeug.datastructures import MultiDict
 from .util import url_for
 
 
-def test_web_create_user(f_app):
+def test_web_create_user(f_app, f_session):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
@@ -24,6 +24,14 @@ def test_web_create_user(f_app):
     assert 302 == response.status_code
     url = urlparse(response.headers.get('Location'))
     assert url.path == url_for('hello')
+    find_user = f_session.query(User) \
+        .filter(User.name == username) \
+        .first()
+    assert find_user
+    assert find_user.created_at
+    assert username == find_user.name
+    assert password == find_user.password
+    assert service == find_user.service
 
 
 @mark.parametrize('emit', ('service', 'password', 'username'))

@@ -49,12 +49,12 @@ def parse(t):
 
 @parse.register(date)
 @parse.register(py_datetime)
-def _(t):
+def _(t) -> str:
     if t.tzinfo is None:
         raise ValueError("Can't parse naive datetime.")
     return t.astimezone(tz=UTC).isoformat()
 
 
 @parse.register(str)
-def _(t):
+def _(t) -> date:
     return parse_date(t, datetime=UTC)

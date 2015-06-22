@@ -29,7 +29,7 @@ class BaseFormField(FormField):
 
 class IntegerHiddenField(HiddenField):
 
-    def process_formdata(self, valuelist):
+    def process_formdata(self, valuelist: list):
         if valuelist and valuelist[0]:
             self.data = int(valuelist[0])
 
