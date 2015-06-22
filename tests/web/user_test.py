@@ -5,6 +5,9 @@ from pytest import mark
 
 from soran.user import User
 from soran.web.auth import Token
+from soran.web.user import CreateUserForm
+
+from werkzeug.datastructures import MultiDict
 
 from .util import url_for
 
@@ -21,33 +24,6 @@ def test_web_create_user(f_app):
     assert 302 == response.status_code
     url = urlparse(response.headers.get('Location'))
     assert url.path == url_for('hello')
-
-
-def test_web_api_create_user(f_session, f_app):
-    username = 'aaa'
-    password = 'abc'
-    service = 'naver'
-    who = 'users'
-    data = {'name': username, 'password': password, 'service': service,
-            'who': who}
-    with f_app.test_client() as client:
-        response = client.post(url_for('user.api@create'), data=data)
-    assert 201 == response.status_code
-    response_data = json.loads(response.data)
-    assert response_data
-    find_user = f_session.query(User)\
-                .filter(User.name == username)\
-                .first()
-    assert find_user
-    assert hasattr(find_user, 'id')
-    assert find_user.id
-    assert hasattr(find_user, 'created_at')
-    assert find_user.created_at
-    assert hasattr(find_user, 'updated_at')
-    assert find_user.updated_at
-    assert username == find_user.name
-    assert password == find_user.password
-    assert service == find_user.service
 
 
 @mark.parametrize('emit', ('service', 'password', 'username'))
@@ -105,15 +81,49 @@ def test_web_notfound_authroize_user(f_session, f_user, weird, f_app):
     assert 404 == response.status_code
 
 
-def test_web_api_create_user(f_app):
+def test_web_api_create_user(f_session, f_app):
     username = 'aaa'
     password = 'abc'
     service = 'naver'
+    who = 'users'
     data = {'name': username, 'password': password, 'service': service,
-            'who': 'users'}
-    with f_app.test_client() as client:
-        response = client.post(url_for('user.create'), data=data)
-    assert response.status_code == 302
+            'who': who}
     with f_app.test_client() as client:
         response = client.post(url_for('user.api@create'), data=data)
-    assert response.status_code == 201
+    assert 201 == response.status_code
+    response_data = json.loads(response.data)
+    assert response_data
+    find_user = f_session.query(User)\
+                         .filter(User.name == username)\
+                         .first()
+    assert find_user
+    assert hasattr(find_user, 'id')
+    assert find_user.id
+    assert hasattr(find_user, 'created_at')
+    assert find_user.created_at
+    assert hasattr(find_user, 'updated_at')
+    assert find_user.updated_at
+    assert username == find_user.name
+    assert password == find_user.password
+    assert service == find_user.service
+
+
+def test_web_sign_up_form(f_app):
+    with f_app.test_request_context():
+        user = User()
+        username = 'seotaiji'
+        password = 'abc'
+        service = 'naver'
+        who = 'users'
+        form = CreateUserForm(formdata=MultiDict([
+            ('name', username),
+            ('password', password),
+            ('service', service),
+            ('who', who),
+        ]))
+        assert form.validate()
+        form.populate_obj(user)
+        assert user.name == username
+        assert user.password == password
+        assert user.service == service
+        assert user.who == who

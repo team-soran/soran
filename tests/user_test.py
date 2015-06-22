@@ -11,8 +11,8 @@ def test_create_user(f_session):
     f_session.add(user)
     f_session.commit()
     find_user = f_session.query(User)\
-                .filter(User.name == username)\
-                .first()
+                         .filter(User.name == username)\
+                         .first()
     assert find_user
     assert hasattr(find_user, 'id')
     assert find_user.id
