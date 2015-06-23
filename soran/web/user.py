@@ -20,10 +20,10 @@ bp = APIBlueprint('user', __name__, template_folder='templates/user')
 def create():
     """Create a user.
     """
-    form = CreateUserForm()
-    user = User()
-    if not form.validate_on_submit():
+    form = CreateUserForm(request.form)
+    if not form.validate():
         abort(400)
+    user = User()
     form.populate_obj(user)
     session.add(user)
     try:
@@ -54,6 +54,5 @@ def authorize():
 
 @bp.route('/users/authorize/', methods=['GET'])
 def get_authroize():
-    form = CreateUserForm()
-    form.process(request.args)
+    form = CreateUserForm(request.args)
     return render_template('authroize.html', form=form)
