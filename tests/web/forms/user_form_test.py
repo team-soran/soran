@@ -1,7 +1,7 @@
 from soran.user import User
 from soran.web.forms.user import CreateUserForm
 
-from ._helper import formify
+from .._helper import formify
 
 
 def test_form_create_user(f_app, f_session):
