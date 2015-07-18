@@ -3,8 +3,7 @@
 
 """
 from flask import Blueprint
-
-from .response import bad_syntax, ok
+from werkzeug.exceptions import BadRequest
 
 
 bp = Blueprint('youtube', __name__, template_folder='templates/youtube')
@@ -17,7 +16,7 @@ def find(youtube):
     try:
         youtube.request_metdata()
     except Exception as e:
-        return ok(message=e.message)
+        return {'message': str(e)}
     if not youtube.metadata:
-        return bad_syntax()
+        raise BadRequest()
     return ''

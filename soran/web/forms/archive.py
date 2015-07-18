@@ -2,7 +2,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from . import BaseForm, BaseFormField, FixedValueField, ServiceForm
+from wtforms import StringField
+
+from . import BaseForm, FixedValueField, ServiceForm
 from ...service import NAVER
 
 
@@ -15,7 +17,10 @@ __all__ = (
 class CreateAlbumForm(BaseForm):
     """앨범 양식"""
 
-    pass
+    name = StringField(label='')
+
+    service_id = StringField(label='')
+
 
 
 class CreateArtistForm(BaseForm):
@@ -33,7 +38,7 @@ class CreateSongForm(BaseForm):
 class ArchiveForm(ServiceForm):
     """노래 청취 기록 양식"""
 
-    album = BaseFormField(CreateAlbumForm, label=u'음악')
+    pass
 
 
 class ArchiveNaverForm(ArchiveForm):
