@@ -12,7 +12,8 @@ from flask.ext.script import Manager, Shell, prompt_bool
 
 from .config import read_config
 from .db import get_alembic_config, get_engine, session
-from .web.app import app
+from soran import app
+
 
 ALEMBIC_LOGGING = {
     'version': 1,

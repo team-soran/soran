@@ -6,7 +6,7 @@ from soran.artist import Artist
 from soran.db import Base, Session
 from soran.song import Song
 from soran.user import User
-from soran.web.app import app
+from soran import app
 
 
 TEST_DATABASE_URL = 'sqlite:///test.db'

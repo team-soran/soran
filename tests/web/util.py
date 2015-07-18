@@ -1,7 +1,6 @@
 from flask import url_for as flask_url_for
 
-
-from soran.web.app import app
+from soran import app
 
 
 def url_for(*args, **kwargs):
