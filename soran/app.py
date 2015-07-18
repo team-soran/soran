@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import Flask, render_template, Response
+from flask import Flask, render_template
 from sassutils.wsgi import SassMiddleware
 
 from soran.web import user, youtube
@@ -42,7 +42,6 @@ app.register_blueprint(youtube.bp)
 
 @app.route('/', methods=['GET'])
 def hello():
-    Response
     """메인 핸들러
 
     :return:

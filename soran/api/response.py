@@ -2,9 +2,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-import json
 from datetime import date, datetime
 from functools import singledispatch
+import json
+
 from flask import Response
 
 from ..user import User
@@ -60,4 +61,3 @@ def _(arg, depth=1):
 @jsonable.register(date)
 def _(arg, depth=1):
     return arg.strftime('%Y-%m-%dT%H:%M:%S')
-

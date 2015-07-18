@@ -22,7 +22,6 @@ class CreateAlbumForm(BaseForm):
     service_id = StringField(label='')
 
 
-
 class CreateArtistForm(BaseForm):
     """가수 양식"""
 

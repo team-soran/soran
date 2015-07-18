@@ -2,14 +2,14 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import (Blueprint, current_app, render_template, request,
-                   redirect, url_for)
+from flask import Blueprint, current_app, redirect, request, url_for
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import InternalServerError
 
 from ..db import session
 from ..user import User
-from .forms.user import CreateUserForm, AuthorizeForm
+from .forms.user import AuthorizeForm, CreateUserForm
+from .response import render_bad_request, render_ok
 
 
 bp = Blueprint('user', __name__, template_folder='templates/user',
@@ -22,8 +22,7 @@ def create():
     """
     form = CreateUserForm(request.form)
     if not form.validate():
-        # FIXME response.py에서 400 담당하는 render함수만들기
-        return render_template('authorize.html', form=form), 400
+        return render_bad_request('authorize.html', form=form)
     user = User()
     form.populate_obj(user)
     session.add(user)
@@ -43,12 +42,11 @@ def authorize():
     """
     form = AuthorizeForm(formdata=request.form)
     if not form.validate():
-        # FIXME response.py에서 400 담당하는 render함수만들기
-        return render_template('authorize.html', form=form), 400
+        return render_bad_request('authorize.html', form=form)
     return redirect(url_for('hello'))
 
 
 @bp.route('/authorize/', methods=['GET'])
 def get_authroize():
     form = CreateUserForm(request.args)
-    return render_template('authorize.html', form=form)
+    return render_ok('authorize.html', form=form)
