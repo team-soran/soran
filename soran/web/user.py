@@ -2,57 +2,53 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from flask import abort, current_app, render_template, request, url_for
+from flask import (Blueprint, current_app, render_template, request,
+                   redirect, url_for)
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import InternalServerError
 
 from ..db import session
 from ..user import User
-from .auth import Token
-from .forms.user import CreateUserForm
-from .response import bad_syntax, created
-from .route import APIBlueprint
+from .forms.user import CreateUserForm, AuthorizeForm
 
 
-bp = APIBlueprint('user', __name__, template_folder='templates/user')
+bp = Blueprint('user', __name__, template_folder='templates/user',
+               url_prefix='/users')
 
 
-@bp.route('/users/', methods=['POST'], api=True)
+@bp.route('/', methods=['POST'])
 def create():
     """Create a user.
     """
     form = CreateUserForm(request.form)
+    if not form.validate():
+        # FIXME response.py에서 400 담당하는 render함수만들기
+        return render_template('authorize.html', form=form), 400
     user = User()
-    if form.validate():
-        form.populate_obj(user)
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError as exc:
-            session.rollback()
-            current_app.logger.error(exc)
-            abort(500)
-        return created(redirect_to=url_for('hello'), user=user)
-    return bad_syntax()
+    form.populate_obj(user)
+    session.add(user)
+    try:
+        session.commit()
+    except IntegrityError as exc:
+        session.rollback()
+        current_app.logger.error(exc)
+        # FIXME 예쁜 500만들기
+        raise InternalServerError()
+    return redirect(url_for('hello'))
 
 
-@bp.route('/users/authorize/', methods=['POST'], api=True)
+@bp.route('/authorize/', methods=['POST'])
 def authorize():
     """Authorize a user and return a token.
     """
-    username = request.form.get('username')
-    password = request.form.get('password')
-    if username is None or password is None:
-        abort(400)
-    user = session.query(User) \
-                  .filter(User.name == username) \
-                  .first()
-    if not user or user.password != password:
-        abort(404)
-    return created(redirect_to=url_for('hello'),
-                   token=Token(user=user, expired_at=None))
+    form = AuthorizeForm(formdata=request.form)
+    if not form.validate():
+        # FIXME response.py에서 400 담당하는 render함수만들기
+        return render_template('authorize.html', form=form), 400
+    return redirect(url_for('hello'))
 
 
-@bp.route('/users/authorize/', methods=['GET'])
+@bp.route('/authorize/', methods=['GET'])
 def get_authroize():
     form = CreateUserForm(request.args)
-    return render_template('authroize.html', form=form)
+    return render_template('authorize.html', form=form)

@@ -76,7 +76,7 @@ class Password:
         """Define equal operator.
 
         :param a object want to comparision with self.
-        :return: :param other: has same plain text with self.
+        :return: ``other`` has same plain text with self.
         :rtype: bool
         """
         password = other
