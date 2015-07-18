@@ -9,6 +9,8 @@ from soran.web.user import CreateUserForm
 
 from werkzeug.datastructures import MultiDict
 
+from sqlalchemy import literal
+
 from .util import url_for
 
 
@@ -19,14 +21,18 @@ def test_web_create_user(f_app, f_session):
     who = 'users'
     data = {'name': username, 'password': password, 'service': service,
             'who': who}
+    find_existing_user = f_session.query(User) \
+                                  .filter(User.name == username) \
+                                  .first()
     with f_app.test_client() as client:
         response = client.post(url_for('user.create'), data=data)
     assert 302 == response.status_code
     url = urlparse(response.headers.get('Location'))
     assert url.path == url_for('hello')
     find_user = f_session.query(User) \
-        .filter(User.name == username) \
-        .first()
+                         .filter(User.name == username) \
+                         .first()
+    assert not find_existing_user
     assert find_user
     assert find_user.created_at
     assert username == find_user.name

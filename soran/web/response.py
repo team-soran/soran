@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from functools import partial, singledispatch
 
-from annotation.typed import optional, typechecked, union
+from annotation.typed import optional, union
 from flask import (Response, abort, flash, jsonify, redirect, render_template,
                    request)
 
@@ -85,7 +85,6 @@ class DynamicResponse:
         505,  # HTTP Version not supported
     ]
 
-    @typechecked
     def __init__(self, template_name: optional(str)=None,
                  status_code: optional(int)=None,
                  json_fields: union(tuple, list)=None,
@@ -101,7 +100,6 @@ class DynamicResponse:
         self.args = args
         self.kwargs = kwargs
 
-    @typechecked
     def redirect(self, *args, **kwargs) -> Response:
         """Redirect to given url."""
         return redirect(args[0], code=kwargs.get('code', 302))
@@ -126,7 +124,6 @@ class DynamicResponse:
                 self.json_depth, self.message) as resp:
             return resp(*self.args, **self.kwargs)
 
-    @typechecked
     @contextmanager
     def _request_context(self, template_name: optional(str)=None,
                          status_code: optional(int)=None,

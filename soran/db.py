@@ -1,10 +1,10 @@
 from alembic.config import Config
-from annotation.typed import typechecked, optional
-from flask import current_app, g, Flask
+from annotation.typed import optional, typechecked
+from flask import Flask, current_app, g
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session as SqlalchemySession
+from sqlalchemy.orm import Session as SqlalchemySession, sessionmaker
 from werkzeug.local import LocalProxy
 
 
