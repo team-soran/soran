@@ -9,7 +9,7 @@ from ..db import session
 from ..user import User
 from .auth import Token
 from .forms.user import CreateUserForm
-from .response import created
+from .response import bad_syntax, created
 from .route import APIBlueprint
 
 
@@ -21,18 +21,18 @@ def create():
     """Create a user.
     """
     form = CreateUserForm(request.form)
-    if not form.validate():
-        abort(400)
     user = User()
-    form.populate_obj(user)
-    session.add(user)
-    try:
-        session.commit()
-    except IntegrityError as exc:
-        session.rollback()
-        current_app.logger.error(exc)
-        abort(500)
-    return created(redirect_to=url_for('hello'), user=user)
+    if form.validate():
+        form.populate_obj(user)
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError as exc:
+            session.rollback()
+            current_app.logger.error(exc)
+            abort(500)
+        return created(redirect_to=url_for('hello'), user=user)
+    return bad_syntax()
 
 
 @bp.route('/users/authorize/', methods=['POST'], api=True)
