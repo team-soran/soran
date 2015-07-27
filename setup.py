@@ -25,7 +25,7 @@ docs_require = [
 
 
 extras_require = {
-    'click', 'import-order', 'flake8',
+    'click', 'import-order', 'flake8', 'ipython'
 }
 
 

@@ -3,7 +3,6 @@ from collections import namedtuple
 import logging.config
 import os
 
-
 from alembic.command import (
     branches as alembic_branch,
     current as alembic_current,
@@ -14,6 +13,7 @@ from alembic.command import (
 )
 from alembic.script import ScriptDirectory
 import click
+import IPython
 
 from soran.app import app
 from soran.config import read_config
@@ -210,6 +210,15 @@ def branches(_config, verbose):
 @pass_config
 def current(_config, verbose, head_only):
     alembic_current(_config.alembic_config, verbose, head_only)
+
+
+@cli.command()
+@pass_config
+def shell(_config):
+    from soran.db import session  # noqa
+    with app.app_context():
+        app.config.update(_config.configuration)
+        IPython.embed()
 
 
 if __name__ == '__main__':
