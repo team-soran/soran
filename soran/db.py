@@ -29,13 +29,14 @@ def ensure_shutdown_session(app: Flask):
 
 
 @typechecked
-def get_engine() -> Engine:
+def get_engine(config: dict=None) -> Engine:
     """DB 연결에 필요한 엔진을 생성합니다.
 
     :return: :py:mod:`sqlalchemy` 의 엔진
     :rtype: :py:class:`sqlalchemy.engine.Engine`
     """
-    config = current_app.config
+    if config is None:
+        config = current_app.config
     if 'DATABASE_ENGINE' in config:
         return config['DATABASE_ENGINE']
     config['DATABASE_ENGINE'] = create_engine(config['DATABASE_URL'])
