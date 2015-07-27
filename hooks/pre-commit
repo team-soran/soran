@@ -4,7 +4,7 @@ set -e
 echo "Running pre-cmmit"
 
 echo "Flake8 ..."
-flake8 --exclude=./soran/migrations --ignore=F811 soran
+flake8 --exclude=./soran/migrations --ignore=F811 soran run.py
 
 echo "import-order ..."
-import-order ./soran soran
+import-order soran ./soran run.py
