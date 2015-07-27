@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from collections import namedtuple
-import os
 import logging.config
+import os
 
 
 from alembic.command import (
@@ -17,7 +17,7 @@ import click
 
 from soran.app import app
 from soran.config import read_config
-from soran.db import get_alembic_config, get_engine, session
+from soran.db import get_alembic_config, get_engine
 
 
 class _Config(object):
@@ -52,7 +52,6 @@ class _Config(object):
             }
         }
     }
-
 
     def __init__(self, path):
         self.abspath = os.path.abspath(path)
@@ -210,7 +209,7 @@ def branches(_config, verbose):
 @click.option('--head-only', default=False, is_flag=True)
 @pass_config
 def current(_config, verbose, head_only):
-    alembic_current(_config.alembic_config,verbose, head_only)
+    alembic_current(_config.alembic_config, verbose, head_only)
 
 
 if __name__ == '__main__':
