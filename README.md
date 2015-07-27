@@ -55,7 +55,7 @@ Or you can upgrade/downgrae your revision.
 With `-@` option, you are able to use relative revision such as `+1` ,
 `-1`
 
-    $ soran -c exam.cfg.py downgrade -@ +1
+    $ soran -c exam.cfg.py checkout -@ +1
 
 ## Documentation
 
