@@ -2,10 +2,12 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from wtforms import StringField
+from wtforms import HiddenField, StringField
+from wtforms.validators import input_required
 
-from . import BaseForm, FixedValueField, ServiceForm
-from ...service import NAVER
+
+from . import BaseForm, BaseFormField, ServiceForm
+from ..service import NAVER
 
 
 __all__ = (
@@ -43,4 +45,13 @@ class ArchiveForm(ServiceForm):
 class ArchiveNaverForm(ArchiveForm):
     """네이버 뮤직 음악 청취 기록 양식"""
 
-    service = FixedValueField(value=NAVER)
+    service = HiddenField(validators=[input_required()])
+
+    album = BaseFormField(CreateAlbumForm, label=u'앨범')
+
+    artist = BaseFormField(CreateArtistForm, label=u'아티스트')
+
+    song = BaseFormField(CreateSongForm, label=u'음악')
+
+    def validate_service(self):
+        assert self.service.data == NAVER

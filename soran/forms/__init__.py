@@ -5,7 +5,7 @@
 from wtforms import Form, FormField, HiddenField
 from wtforms.validators import InputRequired
 
-from ...service import SORAN
+from soran.service import SORAN
 
 
 __all__ = 'BaseForm', 'BaseFormField',
@@ -39,7 +39,5 @@ class ServiceForm(BaseForm):
     service = HiddenField(validators=[InputRequired()], default=SORAN)
 
 
-class FixedValueField(HiddenField):
-
-    def widget(self, field, **attrs):
-        assert self is field
+class ServiceFromField(BaseFormField):
+    pass
