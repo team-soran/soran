@@ -9,7 +9,8 @@ from soran.web import user, youtube
 from soran.web.converter import YoutubeConverter
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='web/templates',
+            static_folder='web/static')
 
 
 app.wsgi_app = SassMiddleware(app.wsgi_app, {
