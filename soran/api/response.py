@@ -7,12 +7,44 @@ from functools import singledispatch
 import json
 
 from flask import Response
+from werkzeug.exceptions import HTTPException
 
 from ..user import User
 
 
-def json_result(**kwargs):
-    return Response(json.dumps(jsonable(kwargs)), mimetype='application/json')
+__all__ = (
+    'APIError', 'APIBadRequest', 'APIIntegrityError',
+    'json_result', 'jsonable',
+)
+
+
+class APIError(HTTPException):
+
+    def get_headers(self, environ=None):
+        return [('Content-Type', 'application/json')]
+
+    def get_body(self, environ=None):
+        return json.dumps({'message': self.description,
+                           'status_code': self.code,
+                           'data': {}})
+
+
+class APIIntegrityError(APIError):
+
+    code = 500
+
+
+class APIBadRequest(APIError):
+
+    code = 400
+
+
+def json_result(data=None, status=200, **kwargs) -> Response:
+    result = data or kwargs
+    payload = {'message': '', 'data': result, 'status_code': status}
+    return Response(json.dumps(jsonable(payload)),
+                    status=status,
+                    content_type='application/json')
 
 
 @singledispatch

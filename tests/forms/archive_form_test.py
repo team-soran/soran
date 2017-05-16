@@ -1,9 +1,7 @@
 from soran import Album
-from soran.archive import Archive
-from soran.service import NAVER
-from soran.web.forms.archive import ArchiveForm, CreateAlbumForm
+from soran.forms.archive import CreateAlbumForm
 
-from .util import MultiDict
+from tests.forms.util import MultiDict
 
 
 def test_create_album_form():

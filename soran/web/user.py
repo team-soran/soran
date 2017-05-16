@@ -7,8 +7,8 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import InternalServerError
 
 from ..db import session
+from ..forms.user import AuthorizeForm, CreateUserForm
 from ..user import User
-from .forms.user import AuthorizeForm, CreateUserForm
 from .response import render_bad_request, render_ok
 
 
